@@ -1,0 +1,129 @@
+{
+  "name": "Brat",
+  "version": "0.0.0",
+  "description": "bundle de graficos da Brat utiliza speedcontrol como base",
+  "homepage": "",
+  "author": {
+    "name": "Mirage",
+    "email": "",
+    "url": ""
+  },
+  "files": [
+    "dashboard",
+    "graphics",
+    "extension.js",
+    "extension"
+  ],
+  "keywords": [
+    "",
+    "nodecg-bundle"
+  ],
+  "nodecg": {
+    "compatibleRange": "^1.1.1",
+    "dashboardPanels": [
+      {
+        "name": "teste",
+        "title": "Video Control",
+        "width": 4,
+        "file": "Video_Control.html",
+        "headerColor": "#0000FF"
+      },
+      {
+        "name": "lista",
+        "title": "Lista",
+        "width": 3,
+        "file": "incentivos-lista.html",
+        "headerColor": "#0000FF",
+        "workspace": "Incentivos"
+      },
+      {
+        "name": "item",
+        "title": "Novo/Edit Incentivo",
+        "width": 4,
+        "file": "incentivos-edit.html",
+        "headerColor": "#0000FF",
+        "workspace": "Incentivos"
+      },
+      {
+        "name": "actions",
+        "title": "Reorder/Import",
+        "width": 4,
+        "file": "incentivos-actions.html",
+        "headerColor": "#0000FF",
+        "workspace": "Incentivos"
+      },
+      {
+        "name": "obs",
+        "title": "OBS",
+        "width": 3,
+        "file": "obs.html",
+        "headerColor": "#0000FF",
+        "workspace": "Scene Editing"
+      },
+      {
+        "name": "obscontrol",
+        "title": "Controle de Cena",
+        "width": 3,
+        "file": "obscontrol.html",
+        "headerColor": "#0000FF"
+      },
+      {
+        "name": "options",
+        "title": "Opçoes de Run",
+        "width": 3,
+        "file": "runOptions.html",
+        "headerColor": "#0000FF"
+      },
+      {
+        "name": "setCrop",
+        "title": "Crop",
+        "file": "setCrop.html",
+        "width": 6,
+        "dialog": true,
+        "dialogButtons": [
+          {
+            "name": "save",
+            "type": "confirm"
+          },
+          {
+            "name": "cancel",
+            "type": "dismiss"
+          }
+        ]
+      }
+    ],
+    "graphics": [
+      {
+        "file": "index.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "nextRun.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "interMission.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "entrevista.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "dashboardHost.html",
+        "width": 1920,
+        "height": 1080
+      }
+    ]
+  },
+  "repository": "https://github.com/nodecg/nodecg.git",
+  "license": "MIT",
+  "dependencies": {
+    "bower-npm-resolver": "^0.10.0",
+    "nodecg-utility-obs": "^6.1.5"
+  }
+}

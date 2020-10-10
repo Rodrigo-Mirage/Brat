@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<style>
+		body {
+			font-family: sans-serif;
+		}
+
+		.monospace {
+			font-family: monospace;
+		}
+	</style>
+ <link rel="stylesheet" type="text/css" href="css/omnibar.css">
+</head>
+<body style="margin:0">
+<script src= "https://player.twitch.tv/js/embed/v1.js"></script>
+	
+<script src="anime.min.js"></script>
+<script src="fitty.js"></script>
+<div id="canvas" style="border:0;width:1920px ; height:1080px;">
+
+	<img id="premios"></img>
+	<img id="patro"></img>
+	<div id="playersDiv"><span id="players"></span></div>
+	<div id="gameTitleDiv"><span id="gameTitle"></span></div>
+	<div id="gameCategoryDiv"><span id="gameCategory"></span></div>
+	<div id="gameEstimateDiv"><span id="gameEstimate"></span></div>
+	<div id="overlay"></div>
+	<div id="preview"></div>
+	<span id="seguir">A SEGUIR</span>
+	<div id="gameSystem"></div>
+	<div id="omnibar"></div>
+
+</div>
+	
+	<script src="inter.js"></script>
+	<script src="omnibar.js"></script>
+	<script type="module" src="https://unpkg.com/x-frame-bypass"></script>
+	<style>
+		@font-face {
+		  font-family: principal;
+		  src: url('../graphics/Fonts/Seven.ttf');
+		}
+
+		body {
+		  font-family: principal;
+		  background-color:#171513;
+			overflow: hidden;
+		}
+		
+		#overlay{
+			position:absolute;
+			height:1080px;
+			width:1920px;
+			top:0;
+			left:0;
+			background-image:url('../graphics/Images/intermission.png');
+			background-repeat: no-repeat; 
+		}
+		
+		#premios{ 
+			-webkit-mask-image: url("Images/mask.svg");
+			mask-size: contain;
+			mask-position: center;
+			mask-repeat: no-repeat;
+			mask-origin: content-box;
+		}
+			
+		#patro{
+			-webkit-mask-image: url("Images/mask.svg");
+			mask-size: contain;
+			mask-position: center;
+			mask-repeat: no-repeat;
+			mask-origin: content-box;
+		}
+		
+	</style>
+	<script>
+		fitty('#players',{minSize: 25,maxSize: 50,multiLine: true});
+		fitty('#gameTitle',{minSize: 25,maxSize: 50,multiLine: true});
+		fitty('#gameCategory',{minSize: 25,maxSize: 50,multiLine: true});
+		fitty('#gameEstimate',{minSize: 25,maxSize: 40,multiLine: true});
+	</script>
+</body>
+</html>
