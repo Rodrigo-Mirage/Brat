@@ -134,17 +134,20 @@ function getnext(run) {
     }
     next4runs.value = nextruns;
   });
+
   nodecg.readReplicant("incentData", (value) => {
-    nodecg.readReplicant("next4runs", (runs) => {
+    console.log(value)
       var nextincs = [];
+      var inject = false;
       for (var i = 0; i < value.length; i++) {
-        for (var j = 0; j < runs.length; j++) {
-          if (value[i].runID == runs[j].id) {
-            nextincs.push(value[i]);
+        if (inject) {
+          nextincs.push(value[i]);
+
+          if (nextincs.length == 4) {
+            break;
           }
         }
       }
       next4incs.value = nextincs;
-    });
   });
 }

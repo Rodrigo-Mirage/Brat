@@ -16,31 +16,99 @@
 	
 	var slideStep= 0;
 
-	setup();
+	//setup();
 	
-	next4runs.on('change', (newVal, oldVal) => {
-		if (newVal)
-		{
-			setRuns(newVal);
-			update();
-		}
-	});
 	
-	next4incs.on('change', (newVal, oldVal) => {
-		if (newVal)
-		{
-			setIncs(newVal);
-			update();
-		}
-	});
+
 	
-	donateTotal.on('change', (newVal, oldVal) => {
-		if (newVal)
-		{
-			setDonate(newVal);
-			update();
+	setTimeout(() => {
+		donateTotal.on('change', (newVal, oldVal) => {
+			if (newVal)
+			{
+				var donateDiv = document.getElementById("donate"); 
+				if(donateDiv) donateDiv.innerHTML = newVal;
+			}
+		});
+
+		next4runs.on('change', (newVal, oldVal) => {
+			if (newVal != oldVal)
+			{
+				setRuns(newVal);
+			}
+		});
+		
+		next4incs.on('change', (newVal, oldVal) => {
+			if (newVal)
+			{
+				setIncs(newVal);
+			}
+		});
+		
+		
+		
+
+		loop();
+
+	}, 2000);
+	
+	var	lopCont = 0;
+
+	function loop() { 
+		var nextRuns = document.getElementById("nextRuns"); 
+		var nextIncs = document.getElementById("nextIncs"); 
+		var nextRunsAlert = document.getElementById("nextRunsAlert"); 
+		var nextIncsAlert = document.getElementById("nextIncsAlert"); 
+		if (nextRuns) nextRuns.style.display = "none";
+		if (nextIncs) nextIncs.style.display = "none";
+		if (nextRunsAlert) nextRunsAlert.style.display = "none";
+		if (nextIncsAlert) nextIncsAlert.style.display = "none";
+		lopCont = 3
+		switch (lopCont) { 
+			case 0:
+			if (nextRunsAlert) nextRunsAlert.style.display = "flex";
+				timer = 5000;
+				lopCont = 1;
+				setTimeout(() => {
+					loop();
+				}, timer);	
+				break;
+			case 1:
+			if (nextRuns) nextRuns.style.display = "flex";
+				timer = 15000;
+				lopCont = 2;
+				setTimeout(() => {
+					loop();
+				}, timer);
+				break;	
+			case 2:
+				if (nextIncsAlert) nextIncsAlert.style.display = "flex";
+				timer = 5000;
+				lopCont = 3;
+				setTimeout(() => {
+					loop();
+				}, timer);
+				break;
+			case 3:
+				if (nextIncs) nextIncs.style.display = "flex";
+				lopCont = 0;
+				loopIncs()
+			break;
+				
 		}
-	});
+	}
+	
+	function loopIncs() { 
+		nodecg.readReplicant("next4incs", "Brat", (incs) => {
+			console.log(incs)
+			document.getElementById("incBox1").style.display = "none";
+			document.getElementById("incBox2").style.display = "none";
+			document.getElementById("incBox3").style.display = "none";
+			document.getElementById("incBox4").style.display = "none";
+			for (var i = 0; i < incs.length; i++){
+
+			}
+		});
+	}
 	
 	function setup(){
 		
@@ -87,14 +155,18 @@
 	
 	function setRuns(value){
 		runsHtml = "";
-		for(var i = 0 ; i < value.length ; i++){
-			runsHtml += "<div class = 'nextRun'>";
-				runsHtml += "<div class = 'nextRunName'>" + value[i].game + "</div>";
-				runsHtml += "<div class = 'nextRunCat'>" + value[i].category + "</div>";
-			runsHtml += "</div>";
-			runsHtml += "<div class = 'nextRunSpacer'></div>";
+		for (var i = 0; i < value.length; i++){
+			var nextBox = document.getElementById("nextBox" + (i + 1));
+			if (nextBox) nextBox.style.display = "flex";
+			if (value[i].game) {
+				var nextRunName = document.getElementById("nextRunName" + (i + 1));
+				var nextRunCat = document.getElementById("nextRunCat" + (i + 1));
+				nextRunName.innerHTML = value[i].game.includes("Jogo Extra") ? value[i].game.substring(0, 12) : value[i].game;
+				nextRunCat.innerHTML = value[i].game.includes("Jogo Extra") ? "Categoria Extra" : value[i].category;
+			} else { 
+				if (nextBox) nextBox.style.display = "none";
+			}
 		}
-		
 	}
 	
 	function setIncs(value){

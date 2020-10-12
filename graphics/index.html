@@ -36,7 +36,7 @@
 					<v-card flat style="margin-top: 5px">
 						<v-row>
 							<v-col cols="2" align-self="center">
-								<v-responsive :aspect-ratio="1/1" class="box"><v-img :src="'./images/logos/'+plat+'.png'"></v-img></v-responsive>
+								<v-responsive :aspect-ratio="1/1" class="box"><div class="platform" id="gameSystem"></div></v-responsive>
 							</v-col>
 							<v-col cols="2" class="text-color" style="display: flex; align-items: flex-end; padding-top: 0px; padding-bottom: 3px;font-size: 28px">categoria</v-col>
 							<v-spacer ></v-spacer>
@@ -97,7 +97,7 @@
 				<v-col cols="8">
 					<v-card outlined>
 						<v-responsive :aspect-ratio="4/3" style="margin-bottom=5px;">
-						<div id="containerPlayer1"></div>
+							<div id="containerPlayer1"></div>
 						</v-responsive>
 					</v-card>
 				</v-col>
@@ -111,16 +111,50 @@
 				</v-col>			
 				<v-spacer></v-spacer>	
 				<v-col cols="7" style="display: flex;justify-content: space-around;align-content: center; padding-top:0px">
-					<v-row>
-						<v-col v-for="(item,i) in bar" :key="i" class="box" style="margin-right: 10px; color: #212121">
-							<template v-if="item.inc === false">
-								<h2>{{item.title}}</h2>
-								<h4 style="margin-left:20px">{{item.subtitle}}</h4>
-							</template>
-							<template v-if="item.inc === true">
-								<h2>{{item.title}}</h2>
-								<h4 style="margin-left: 20px;display: flex;justify-content: space-between;">{{item.subtitle}}	<span>{{item.val1}} / {{item.val2}}</span></h4>
-							</template>
+					<v-row id='nextRunsAlert'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2>Á Seguir</h2>
+						</v-col>
+					</v-row>
+					<v-row id='nextRuns'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2 id="nextRunName1">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat1">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox2">
+							<h2 id="nextRunName2">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat2">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox3">
+							<h2 id="nextRunName3">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat3">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox4">
+							<h2 id="nextRunName4">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat4">subtitle</h4>
+						</v-col>
+					</v-row>
+					<v-row id='nextIncsAlert'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2>Próximos Incentivos</h2>
+						</v-col>
+					</v-row>
+					<v-row id='nextIncs'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox1">
+							<h2 id="incGame1">Title2</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName1">subtitle	<span id="incVal1">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox2">
+							<h2 id="incGame2">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName2">subtitle	<span id="incVal2">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox3">
+							<h2 id="incGame3">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName3">subtitle	<span id="incVal3">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox4">
+							<h2 id="incGame4">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName4">subtitle	<span id="incVal4">1/2</span></h4>
 						</v-col>
 					</v-row>
 				</v-col>
@@ -130,7 +164,7 @@
 						<v-row>
 							<v-col cols="2" class="text-color" style="display: flex; padding-bottom: 3px;font-size: 46px">R$</v-col>
 							<v-spacer></v-spacer>
-							<v-col align-self="end" class="text-color" style="text-align: right; font-size: 46px;" cols="10" id="donations">{{donations}}</v-col>
+							<v-col align-self="end" class="text-color" style="text-align: right; font-size: 46px;" cols="10" id="donate">{{donations}}</v-col>
 						</v-row>
 					</v-card>
 				</v-col>
@@ -176,7 +210,8 @@
 					</v-col>
 					<v-col cols="9">
 						<v-card outlined>
-						  <v-responsive :aspect-ratio="16/9" id="containerPlayer1">
+						  <v-responsive :aspect-ratio="16/9">
+							<div id="containerPlayer1"></div>
 						  </v-responsive>
 						</v-card>
 						<v-row>
@@ -219,57 +254,92 @@
 								</v-card>
 							</v-col>
 							<v-col cols="1" align-self="center">
-								<v-responsive :aspect-ratio="1/1" class="box"><v-img :src="'./images/logos/'+plat+'.png'"></v-img></v-responsive>
+								<v-responsive :aspect-ratio="1/1" class="box"><div class="platform" id="gameSystem"></div></v-responsive>
 							</v-col>
 						</v-row>
 					</v-col>
 				</v-row>
 		  </v-container>
 		  <v-container fluid style="background: #212121; max-height: 120px; padding: 0px">
-			  <v-row no-gutters>
-				  <v-col cols="2" style="display: flex;justify-content: space-around;align-content: center; padding-top:8px">
+			<v-row no-gutters>
+				<v-col cols="2" style="display: flex;justify-content: space-around;align-content: center; padding-top:8px">
 					<img src="./images/bratlogo.png" style="height: 20%;">
-					  <img src="./images/msflogo.png" style="height: 20%;">
-					</v-col>			
-					<v-spacer></v-spacer>	
-					<v-col cols="7" style="display: flex;justify-content: space-around;align-content: center; padding-top:0px">
+					<img src="./images/msflogo.png" style="height: 20%;">
+				</v-col>			
+				<v-spacer></v-spacer>	
+				<v-col cols="7" style="display: flex;justify-content: space-around;align-content: center; padding-top:0px">
+					<v-row id='nextRunsAlert'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2>Á Seguir</h2>
+						</v-col>
+					</v-row>
+					<v-row id='nextRuns'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2 id="nextRunName1">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat1">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox2">
+							<h2 id="nextRunName2">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat2">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox3">
+							<h2 id="nextRunName3">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat3">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox4">
+							<h2 id="nextRunName4">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat4">subtitle</h4>
+						</v-col>
+					</v-row>
+					<v-row id='nextIncsAlert'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2>Próximos Incentivos</h2>
+						</v-col>
+					</v-row>
+					<v-row id='nextIncs'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox1">
+							<h2 id="incGame1">Title2</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName1">subtitle	<span id="incVal1">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox2">
+							<h2 id="incGame2">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName2">subtitle	<span id="incVal2">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox3">
+							<h2 id="incGame3">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName3">subtitle	<span id="incVal3">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox4">
+							<h2 id="incGame4">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName4">subtitle	<span id="incVal4">1/2</span></h4>
+						</v-col>
+					</v-row>
+				</v-col>
+				<v-spacer></v-spacer>
+				<v-col cols="2" style="display:inline; margin-right: 20px"class="text-color">
+					<v-card flat>
 						<v-row>
-							<v-col v-for="(item,i) in bar" :key="i" class="box" style="margin-right: 10px; color: #212121">
-								<template v-if="item.inc === false">
-								  <h2>{{item.title}}</h2>
-								  <h4 style="margin-left:20px">{{item.subtitle}}</h4>
-							  </template>
-							  <template v-if="item.inc === true">
-								  <h2>{{item.title}}</h2>
-								  <h4 style="margin-left: 20px;display: flex;justify-content: space-between;">{{item.subtitle}}	<span>{{item.val1}} / {{item.val2}}</span></h4>
-							  </template>
-							</v-col>
+							<v-col cols="2" class="text-color" style="display: flex; padding-bottom: 3px;font-size: 46px">R$</v-col>
+							<v-spacer></v-spacer>
+							<v-col align-self="end" class="text-color" style="text-align: right; font-size: 46px;" cols="10" id="donate">{{donations}}</v-col>
 						</v-row>
-					</v-col>
-					<v-spacer></v-spacer>
-					<v-col cols="2" style="display:inline; margin-right: 20px"class="text-color">
-						<v-card flat>
-							<v-row>
-								<v-col cols="2" class="text-color" style="display: flex; padding-bottom: 3px;font-size: 46px">R$</v-col>
-								<v-spacer></v-spacer>
-								<v-col align-self="end" class="text-color" style="text-align: right; font-size: 46px;" cols="10" id="donations">{{donations}}</v-col>
-							</v-row>
-						</v-card>
-					</v-col>
-				</v-row>
-			</v-container>
+					</v-card>
+				</v-col>
+			</v-row>
+		</v-container>
 		</v-app>
 	</script>
 	<script type="text/x-template" id="fourByThree-Two">
 		<v-app>
 		  <v-container fluid style="height: 990px">
-			  <v-row dense align="center" style="height: 700px">
+			  <v-row dense style="max-height: 700px">
 				  <v-col cols="6">
 					  <v-card outlined>
-						  <v-responsive :aspect-ratio="4/3">
-						<div id="containerPlayer1"></div></v-responsive>
+						  <v-responsive :aspect-ratio="4/3" max-height="700px">
+							<div id="containerPlayer1"></div>
+						</v-responsive>
 					  </v-card>
-					  	<v-row style="margin-left: 0px;margin-right: 0px;">
+					  	<v-row style="margin-left: 0px;margin-right: 0px; position: relative">
 							<v-col align-self="center" class="text-color" style="display: inline;font-size: 38px;margin-top: -70px;" cols="6" id="player1">
 		  						{{player1}}
 		  					</v-col>
@@ -280,10 +350,11 @@
 				  </v-col>
 				  <v-col cols="6">
 					<v-card outlined>
-						<v-responsive :aspect-ratio="4/3">
-						<div id="containerPlayer2"></div></v-responsive>
+						<v-responsive :aspect-ratio="4/3" max-height="700px">
+							<div id="containerPlayer2"></div>
+						</v-responsive>
 					</v-card>
-						<v-row style="margin-left: 0px;margin-right: 0px;">
+						<v-row style="margin-left: 0px;margin-right: 0px; position: relative">
 							<v-col align-self="center" class="text-color" style="display: inline;font-size: 38px;margin-top: -70px;" cols="6" id="timer2">
 								{{timer2}}
 							</v-col>
@@ -349,59 +420,92 @@
 						</v-col>
 						<v-spacer></v-spacer>
 						<v-col cols="4">
-							<v-responsive :aspect-ratio="1/1" class="box">
-								<v-img :src="'./images/logos/'+plat+'.png'"></v-img>
-							</v-responsive>
+							<v-responsive :aspect-ratio="1/1" class="box"><div class="platform" id="gameSystem"></div></v-responsive>
 						</v-col>
 					</v-row>
 				</v-col>
 			  </v-row>
 		  </v-container>
 		  <v-container fluid style="background: #212121; max-height: 120px; padding: 0px">
-			  <v-row no-gutters>
-				  <v-col cols="2" style="display: flex;justify-content: space-around;align-content: center; padding-top:8px">
+			<v-row no-gutters>
+				<v-col cols="2" style="display: flex;justify-content: space-around;align-content: center; padding-top:8px">
 					<img src="./images/bratlogo.png" style="height: 20%;">
-					  <img src="./images/msflogo.png" style="height: 20%;">
-					</v-col>			
-					<v-spacer></v-spacer>	
-					<v-col cols="7" style="display: flex;justify-content: space-around;align-content: center; padding-top:0px">
+					<img src="./images/msflogo.png" style="height: 20%;">
+				</v-col>			
+				<v-spacer></v-spacer>	
+				<v-col cols="7" style="display: flex;justify-content: space-around;align-content: center; padding-top:0px">
+					<v-row id='nextRunsAlert'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2>Á Seguir</h2>
+						</v-col>
+					</v-row>
+					<v-row id='nextRuns'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2 id="nextRunName1">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat1">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox2">
+							<h2 id="nextRunName2">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat2">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox3">
+							<h2 id="nextRunName3">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat3">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox4">
+							<h2 id="nextRunName4">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat4">subtitle</h4>
+						</v-col>
+					</v-row>
+					<v-row id='nextIncsAlert'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2>Próximos Incentivos</h2>
+						</v-col>
+					</v-row>
+					<v-row id='nextIncs'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox1">
+							<h2 id="incGame1">Title2</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName1">subtitle	<span id="incVal1">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox2">
+							<h2 id="incGame2">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName2">subtitle	<span id="incVal2">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox3">
+							<h2 id="incGame3">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName3">subtitle	<span id="incVal3">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox4">
+							<h2 id="incGame4">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName4">subtitle	<span id="incVal4">1/2</span></h4>
+						</v-col>
+					</v-row>
+				</v-col>
+				<v-spacer></v-spacer>
+				<v-col cols="2" style="display:inline; margin-right: 20px"class="text-color">
+					<v-card flat>
 						<v-row>
-							<v-col v-for="(item,i) in bar" :key="i" class="box" style="margin-right: 10px; color: #212121">
-								<template v-if="item.inc === false">
-								  <h2>{{item.title}}</h2>
-								  <h4 style="margin-left:20px">{{item.subtitle}}</h4>
-							  </template>
-							  <template v-if="item.inc === true">
-								  <h2>{{item.title}}</h2>
-								  <h4 style="margin-left: 20px;display: flex;justify-content: space-between;">{{item.subtitle}}	<span>{{item.val1}} / {{item.val2}}</span></h4>
-							  </template>
-							</v-col>
+							<v-col cols="2" class="text-color" style="display: flex; padding-bottom: 3px;font-size: 46px">R$</v-col>
+							<v-spacer></v-spacer>
+							<v-col align-self="end" class="text-color" style="text-align: right; font-size: 46px;" cols="10" id="donate">{{donations}}</v-col>
 						</v-row>
-					</v-col>
-					<v-spacer></v-spacer>
-					<v-col cols="2" style="display:inline; margin-right: 20px"class="text-color">
-						<v-card flat>
-							<v-row>
-								<v-col cols="2" class="text-color" style="display: flex; padding-bottom: 3px;font-size: 46px">R$</v-col>
-								<v-spacer></v-spacer>
-								<v-col align-self="end" class="text-color" style="text-align: right; font-size: 46px;" cols="10" id="donations">{{donations}}</v-col>
-							</v-row>
-						</v-card>
-					</v-col>
-				</v-row>
-			</v-container>
+					</v-card>
+				</v-col>
+			</v-row>
+		</v-container>
 		</v-app>
 	</script>
 	<script type="text/x-template" id="sixteenByNine-Two">
 		<v-app>
 		  <v-container fluid style="height: 990px">
-			  <v-row dense align="center" style="height: 700px">
+			  <v-row dense style="height: 700px">
 				  <v-col cols="6">
-					  <v-card outlined>
-						  <v-responsive :aspect-ratio="16/9">
-						<div id="containerPlayer1"></div></v-responsive>
+					  <v-card outlined  style="margin-top: 85px">
+						  <v-responsive :aspect-ratio="16/9" max-height="530px">
+							<div id="containerPlayer1"></div>
+						</v-responsive>
 					  </v-card>
-					  	<v-row style="margin-left: 0px;margin-right: 0px;">
+					  	<v-row style="margin-left: 0px;margin-right: 0px; position: relative">
 							<v-col align-self="center" class="text-color" style="display: inline;font-size: 38px;margin-top: -70px;" cols="6" id="player1">
 		  						{{player1}}
 		  					</v-col>
@@ -411,11 +515,12 @@
 						</v-row>
 				  </v-col>
 				  <v-col cols="6">
-					<v-card outlined>
-						<v-responsive :aspect-ratio="16/9">
-						<div id="containerPlayer2"></div></v-responsive>
+					<v-card outlined  style="margin-top: 85px">
+						<v-responsive :aspect-ratio="16/9" max-height="530px">
+							<div id="containerPlayer2"></div>
+						</v-responsive>
 					</v-card>
-						<v-row style="margin-left: 0px;margin-right: 0px;">
+						<v-row style="margin-left: 0px;margin-right: 0px; position: relative">
 							<v-col align-self="center" class="text-color" style="display: inline;font-size: 38px;margin-top: -70px;" cols="6" id="timer2">
 								{{timer2}}
 							</v-col>
@@ -481,47 +586,90 @@
 						</v-col>
 						<v-spacer></v-spacer>
 						<v-col cols="4">
-							<v-responsive :aspect-ratio="1/1" class="box">
-								<v-img :src="'./images/logos/'+plat+'.png'"></v-img>
-							</v-responsive>
+							<v-responsive :aspect-ratio="1/1" class="box"><div class="platform" id="gameSystem"></div></v-responsive>
 						</v-col>
 					</v-row>
 				</v-col>
 			  </v-row>
 		  </v-container>
 		  <v-container fluid style="background: #212121; max-height: 120px; padding: 0px">
-			  <v-row no-gutters>
-				  <v-col cols="2" style="display: flex;justify-content: space-around;align-content: center; padding-top:8px">
+			<v-row no-gutters>
+				<v-col cols="2" style="display: flex;justify-content: space-around;align-content: center; padding-top:8px">
 					<img src="./images/bratlogo.png" style="height: 20%;">
-					  <img src="./images/msflogo.png" style="height: 20%;">
-					</v-col>			
-					<v-spacer></v-spacer>	
-					<v-col cols="7" style="display: flex;justify-content: space-around;align-content: center; padding-top:0px">
+					<img src="./images/msflogo.png" style="height: 20%;">
+				</v-col>			
+				<v-spacer></v-spacer>	
+				<v-col cols="7" style="display: flex;justify-content: space-around;align-content: center; padding-top:0px">
+					<v-row id='nextRunsAlert'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2>Á Seguir</h2>
+						</v-col>
+					</v-row>
+					<v-row id='nextRuns'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2 id="nextRunName1">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat1">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox2">
+							<h2 id="nextRunName2">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat2">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox3">
+							<h2 id="nextRunName3">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat3">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox4">
+							<h2 id="nextRunName4">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat4">subtitle</h4>
+						</v-col>
+					</v-row>
+					<v-row id='nextIncsAlert'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2>Próximos Incentivos</h2>
+						</v-col>
+					</v-row>
+					<v-row id='nextIncs'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox1">
+							<h2 id="incGame1">Title2</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName1">subtitle	<span id="incVal1">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox2">
+							<h2 id="incGame2">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName2">subtitle	<span id="incVal2">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox3">
+							<h2 id="incGame3">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName3">subtitle	<span id="incVal3">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox4">
+							<h2 id="incGame4">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName4">subtitle	<span id="incVal4">1/2</span></h4>
+						</v-col>
+					</v-row>
+				</v-col>
+				<v-spacer></v-spacer>
+				<v-col cols="2" style="display:inline; margin-right: 20px"class="text-color">
+					<v-card flat>
 						<v-row>
-							<v-col v-for="(item,i) in bar" :key="i" class="box" style="margin-right: 10px; color: #212121">
-								<template v-if="item.inc === false">
-								  <h2>{{item.title}}</h2>
-								  <h4 style="margin-left:20px">{{item.subtitle}}</h4>
-							  </template>
-							  <template v-if="item.inc === true">
-								  <h2>{{item.title}}</h2>
-								  <h4 style="margin-left: 20px;display: flex;justify-content: space-between;">{{item.subtitle}}	<span>{{item.val1}} / {{item.val2}}</span></h4>
-							  </template>
-							</v-col>
+							<v-col cols="2" class="text-color" style="display: flex; padding-bottom: 3px;font-size: 46px">R$</v-col>
+							<v-spacer></v-spacer>
+							<v-col align-self="end" class="text-color" style="text-align: right; font-size: 46px;" cols="10" id="donate">{{donations}}</v-col>
 						</v-row>
-					</v-col>
-					<v-spacer></v-spacer>
-					<v-col cols="2" style="display:inline; margin-right: 20px"class="text-color">
-						<v-card flat>
-							<v-row>
-								<v-col cols="2" class="text-color" style="display: flex; padding-bottom: 3px;font-size: 46px">R$</v-col>
-								<v-spacer></v-spacer>
-								<v-col align-self="end" class="text-color" style="text-align: right; font-size: 46px;" cols="10" id="donations">{{donations}}</v-col>
-							</v-row>
-						</v-card>
-					</v-col>
-				</v-row>
-			</v-container>
+					</v-card>
+				</v-col>
+			</v-row>
+				<v-spacer></v-spacer>
+				<v-col cols="2" style="display:inline; margin-right: 20px"class="text-color">
+					<v-card flat>
+						<v-row>
+							<v-col cols="2" class="text-color" style="display: flex; padding-bottom: 3px;font-size: 46px">R$</v-col>
+							<v-spacer></v-spacer>
+							<v-col align-self="end" class="text-color" style="text-align: right; font-size: 46px;" cols="10" id="donate">{{donations}}</v-col>
+						</v-row>
+					</v-card>
+				</v-col>
+			</v-row>
+		</v-container>
 		</v-app>
 	</script>
 	<script type="text/x-template" id="fourByThree-Four">
@@ -530,21 +678,23 @@
 			  <v-row align="center">
 				  <v-col cols="4">
 					<v-card outlined>
-						  	<v-responsive :aspect-ratio="4/3">
-						<div id="containerPlayer1"></div></v-responsive>
-					  		<v-row style="margin-left: 0px;margin-right: 0px;">
-								<v-col align-self="center" class="text-color" style="display: inline;font-size: 38px;margin-top: -70px;" cols="6" id="player1">
-									{{player1}}
-								</v-col>
-								<v-col align-self="center" class="text-color" style="display: inline;font-size: 38px;margin-top: -70px;text-align: end;" cols="6" id="timer1">
-									{{timer1}}
-								</v-col>
-							</v-row>
+						<v-responsive :aspect-ratio="4/3" max-height="460px">
+							<div id="containerPlayer1"></div>
+						</v-responsive>
+					  	<v-row style="margin-left: 0px;margin-right: 0px; margin-bottom: -10px; position: relative">
+							<v-col align-self="center" class="text-color" style="display: inline;font-size: 38px;margin-top: -70px;" cols="6" id="player1">
+								{{player1}}
+							</v-col>
+							<v-col align-self="center" class="text-color" style="display: inline;font-size: 38px;margin-top: -70px;text-align: end;" cols="6" id="timer1">
+								{{timer1}}
+							</v-col>
+						</v-row>
 					</v-card>
 					<v-card outlined style="margin-top:15px">
-						<v-responsive :aspect-ratio="4/3">
-						<div id="containerPlayer2"></div></v-responsive>
-						<v-row style="margin-left: 0px;margin-right: 0px;">
+						<v-responsive :aspect-ratio="4/3" max-height="460px">
+							<div id="containerPlayer2"></div>
+						</v-responsive>
+						<v-row style="margin-left: 0px;margin-right: 0px; margin-bottom: -10px; position: relative">
 						  <v-col align-self="center" class="text-color" style="display: inline;font-size: 38px;margin-top: -70px;" cols="6" id="player 2">
 							  {{player2}}
 						  </v-col>
@@ -574,7 +724,7 @@
 				<v-card flat style="margin-top: 5px">
 					<v-row>
 						<v-col cols="3" align-self="center">
-							<v-responsive :aspect-ratio="1/1" class="box"><v-img :src="'./images/logos/'+plat+'.png'"></v-img></v-responsive>
+							<v-responsive :aspect-ratio="1/1" class="box"><div class="platform" id="gameSystem"></div></v-responsive>
 						</v-col>	
 						<v-spacer></v-spacer>
 						<v-col cols="5" align-self="center">
@@ -617,9 +767,10 @@
 			  </v-col>
 			  <v-col cols="4">
 				<v-card outlined>
-						  <v-responsive :aspect-ratio="4/3">
-						<div id="containerPlayer3"></div></v-responsive>
-						  <v-row style="margin-left: 0px;margin-right: 0px;">
+						<v-responsive :aspect-ratio="4/3" max-height="460px">
+							<div id="containerPlayer3"></div>
+						</v-responsive>
+						<v-row style="margin-left: 0px ;margin-right: 0px; margin-bottom: -10px; position: relative">
 							<v-col align-self="center" class="text-color" style="display: inline;font-size: 38px;margin-top: -70px;" cols="6" id="player3">
 								{{player3}}
 							</v-col>
@@ -629,9 +780,10 @@
 						</v-row>
 				</v-card>
 				<v-card outlined style="margin-top:15px">
-					<v-responsive :aspect-ratio="4/3">
-						<div id="containerPlayer4"></div></v-responsive>
-					<v-row style="margin-left: 0px;margin-right: 0px;">
+					<v-responsive :aspect-ratio="4/3" max-height="460px">
+						<div id="containerPlayer4"></div>
+					</v-responsive>
+					<v-row style="margin-left: 0px;margin-right: 0px; margin-bottom: -10px; position: relative">
 					  <v-col align-self="center" class="text-color" style="display: inline;font-size: 38px;margin-top: -70px;" cols="6" id="player4">
 						  {{player4}}
 					  </v-col>
@@ -644,38 +796,72 @@
 			</v-row>
 		  </v-container>
 		  <v-container fluid style="background: #212121; max-height: 120px; padding: 0px">
-			  <v-row no-gutters>
-				  <v-col cols="2" style="display: flex;justify-content: space-around;align-content: center; padding-top:8px">
+			<v-row no-gutters>
+				<v-col cols="2" style="display: flex;justify-content: space-around;align-content: center; padding-top:8px">
 					<img src="./images/bratlogo.png" style="height: 20%;">
-					  <img src="./images/msflogo.png" style="height: 20%;">
-					</v-col>			
-					<v-spacer></v-spacer>	
-					<v-col cols="7" style="display: flex;justify-content: space-around;align-content: center; padding-top:0px">
+					<img src="./images/msflogo.png" style="height: 20%;">
+				</v-col>			
+				<v-spacer></v-spacer>	
+				<v-col cols="7" style="display: flex;justify-content: space-around;align-content: center; padding-top:0px">
+					<v-row id='nextRunsAlert'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2>Á Seguir</h2>
+						</v-col>
+					</v-row>
+					<v-row id='nextRuns'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2 id="nextRunName1">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat1">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox2">
+							<h2 id="nextRunName2">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat2">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox3">
+							<h2 id="nextRunName3">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat3">subtitle</h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox4">
+							<h2 id="nextRunName4">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="nextRunCat4">subtitle</h4>
+						</v-col>
+					</v-row>
+					<v-row id='nextIncsAlert'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="nextBox1">
+							<h2>Próximos Incentivos</h2>
+						</v-col>
+					</v-row>
+					<v-row id='nextIncs'>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox1">
+							<h2 id="incGame1">Title2</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName1">subtitle	<span id="incVal1">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox2">
+							<h2 id="incGame2">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName2">subtitle	<span id="incVal2">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox3">
+							<h2 id="incGame3">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName3">subtitle	<span id="incVal3">1/2</span></h4>
+						</v-col>
+						<v-col class="box" style="margin-right: 10px; color: #212121" id="incBox4">
+							<h2 id="incGame4">Title</h2>
+							<h4 style="margin-left: 20px;display: flex;justify-content: space-between;" id="incName4">subtitle	<span id="incVal4">1/2</span></h4>
+						</v-col>
+					</v-row>
+				</v-col>
+				<v-spacer></v-spacer>
+				<v-col cols="2" style="display:inline; margin-right: 20px"class="text-color">
+					<v-card flat>
 						<v-row>
-							<v-col v-for="(item,i) in bar" :key="i" class="box" style="margin-right: 10px; color: #212121">
-								<template v-if="item.inc === false">
-								  <h2>{{item.title}}</h2>
-								  <h4 style="margin-left:20px">{{item.subtitle}}</h4>
-							  </template>
-							  <template v-if="item.inc === true">
-								  <h2>{{item.title}}</h2>
-								  <h4 style="margin-left: 20px;display: flex;justify-content: space-between;">{{item.subtitle}}	<span>{{item.val1}} / {{item.val2}}</span></h4>
-							  </template>
-							</v-col>
+							<v-col cols="2" class="text-color" style="display: flex; padding-bottom: 3px;font-size: 46px">R$</v-col>
+							<v-spacer></v-spacer>
+							<v-col align-self="end" class="text-color" style="text-align: right; font-size: 46px;" cols="10" id="donate">{{donations}}</v-col>
 						</v-row>
-					</v-col>
-					<v-spacer></v-spacer>
-					<v-col cols="2" style="display:inline; margin-right: 20px"class="text-color">
-						<v-card flat>
-							<v-row>
-								<v-col cols="2" class="text-color" style="display: flex; padding-bottom: 3px;font-size: 46px">R$</v-col>
-								<v-spacer></v-spacer>
-								<v-col align-self="end" class="text-color" style="text-align: right; font-size: 46px;" cols="10" id="donations">{{donations}}</v-col>
-							</v-row>
-						</v-card>
-					</v-col>
-				</v-row>
-			</v-container>
+					</v-card>
+				</v-col>
+			</v-row>
+		</v-container>
 		</v-app>
 	</script>
   
@@ -684,8 +870,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-<script src="https://player.twitch.tv/js/embed/v1.js"></script>
-    <script src="main.js"></script>
+	<script src="https://player.twitch.tv/js/embed/v1.js"></script>
+	<script src="main.js"></script>
+	<script src="omnibar.js"></script>
   </body>
   <style>
 		@font-face {
@@ -713,12 +900,12 @@
 		.theme--light.v-divider {
 			border-color:rgb(152,224,95);
 			border-color: linear-gradient(180deg, rgba(152,224,95,1) 0%, rgba(98,201,99,1) 100%);
-			box-shadow: 0 0 10px 5px  rgba(152,224,95,.7);
+			box-shadow: 0 0 10px 5px  rgba(152,224,95,.3);
 		}
 		.theme--light.v-sheet--outlined {
 			border-color:rgb(152,224,95);
 			border-color: linear-gradient(180deg, rgba(152,224,95,1) 0%, rgba(98,201,99,1) 100%);
-			box-shadow: 0 0 10px 5px  rgba(152,224,95,.7);
+			box-shadow: 0 0 10px 5px  rgba(152,224,95,.3);
 		}
 		.box {
 			/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#98e05f+0,62c963+100 */
@@ -729,15 +916,19 @@
 			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#98e05f', endColorstr='#62c963',GradientType=0 ); /* IE6-9 */
 			border-color:rgb(152,224,95);
 			border-color: linear-gradient(180deg, rgba(152,224,95,1) 0%, rgba(98,201,99,1) 100%);
-			box-shadow: 0 0 10px 5px  rgba(152,224,95,.7);
+			box-shadow: 0 0 10px 5px  rgba(152,224,95,.3);
 		}
 		.text-color {
 			color: rgb(152,224,95) !important;
 			color: linear-gradient(to bottom,  #98e05f 0%,#62c963 100%) !important;
-			text-shadow: 1px 1px 2px black, 0 0 30px rgba(152,224,95,1), 0 0 15px  rgba(98,201,99,1);
+			text-shadow: 1px 1px 2px black, 0 0 30px rgba(152,224,95,.5), 0 0 15px  rgba(98,201,99,.5);
 		}
 		.v-image__image--cover {
     		background-size: contain !important;
+		}
+		.platform{
+			height: 100%;
+			background-size: cover;
 		}
   </style>
 </html>

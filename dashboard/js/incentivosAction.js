@@ -37,7 +37,7 @@ function reorder() {
 }
 
 incentUrl.on("change", (newVal, oldVal) => {
-  if (newVal != oldVal) {
+  if (newVal != oldVal && oldVal) {
     actualUrl = newVal;
     reImport();
   }

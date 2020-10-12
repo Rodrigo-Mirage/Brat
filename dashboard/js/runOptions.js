@@ -33,15 +33,14 @@ optionsData.on("change", (newVal, oldVal) => {
 });
 
 runDataActiveRun.on("change", (newVal, oldVal) => {
-  if (newVal != oldVal) SetActive(newVal);
+  if (newVal) SetActive(newVal);
 });
 
 runDataArray.on("change", (newVal, oldVal) => {
-  if (newVal != oldVal) SetAll(newVal);
+  if (newVal) SetAll(newVal);
 });
 
 optionsActiveData.on("change", (newVal, oldVal) => {
-  if (newVal != oldVal) {
     gameName.innerHTML = newVal.gameName ? newVal.gameName : "";
     var text =
       "<button onclick='SetRatio(\"" +
@@ -57,7 +56,7 @@ optionsActiveData.on("change", (newVal, oldVal) => {
           htmlCrops += "<br>";
         }
         htmlCrops +=
-          '<button class="nodecg-configure round-button" nodecg-dialog="setCrop" onclick="openCrop(\'' +
+          crop.channel + ': <button class="nodecg-configure round-button" nodecg-dialog="setCrop" onclick="openCrop(\'' +
           newVal.idRun +
           "','" +
           crop.channel +
@@ -70,11 +69,9 @@ optionsActiveData.on("change", (newVal, oldVal) => {
       crop.innerHTML = htmlCrops;
     }
     couch.value = (newVal.couch ? newVal.couch : "");
-  }
 });
 
 optionsNextData.on("change", (newVal, oldVal) => {
-  if (newVal != oldVal) {
     gameNameNext.innerHTML = newVal.gameName ? newVal.gameName : "";
     var text =
       "<button onclick='SetRatio(\"" +
@@ -91,7 +88,7 @@ optionsNextData.on("change", (newVal, oldVal) => {
         }
 
         htmlCrops +=
-          '<button class="nodecg-configure round-button" nodecg-dialog="setCrop" onclick="openCrop(\'' +
+          crop.channel + ': <button class="nodecg-configure round-button" nodecg-dialog="setCrop" onclick="openCrop(\'' +
           newVal.idRun +
           "','" +
           crop.channel +
@@ -104,8 +101,6 @@ optionsNextData.on("change", (newVal, oldVal) => {
       cropNext.innerHTML = htmlCrops;
     }
     couchNext.value = (newVal.couch ? newVal.couch : "");
-
-  }
 });
 
 function openCrop(id, channel, layout, prop) {

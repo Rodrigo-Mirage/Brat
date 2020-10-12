@@ -7,6 +7,7 @@ var opts = [];
 var templateName = "";
 var optLayout = "16";
 var ex = 0;
+var eY = 0;
 var  options = {
   width: 1414,
   height: 803,
@@ -24,7 +25,6 @@ var videoWidth = 1414;
 
 nodecg.readReplicant("optionsActiveData", "Brat", (opt) => {
   templateName = "#";
-  console.log(opt)
   opts = opt.crops;
   optLayout = opt.layout;
   couchText = opt.couch;
@@ -52,28 +52,32 @@ nodecg.readReplicant("optionsActiveData", "Brat", (opt) => {
       videoHeight = 940;
       videoWidth = 1254;
       //ex = 160
+      eY = 5;
       break;
     case "#sixteenByNine-One":
       videoHeight = 803;
       videoWidth = 1414;
+      eY = 5;
       break;
     case "#fourByThree-Two":
-      videoHeight = 940;
-      videoWidth = 1254;
-      ex = 160
+      videoHeight = 713;
+      videoWidth = 944;
+      ex = 326;
       break;
     case"#sixteenByNine-Two":
       videoHeight = 940;
       videoWidth = 1254;
+      ex = 730;
       break;
     case "#fourByThree-Four":
-      videoHeight = 940;
-      videoWidth = 1254;
-      ex = 160
+      videoHeight = 460;
+      videoWidth = 614;
+      ex = 204;
+      ey = 0;
       break;
-
   }
 });
+
 
 
 setTimeout(() => {
@@ -104,6 +108,7 @@ setTimeout(() => {
             sponsors: [
               {src: "./images/sponsor/1.png"},
               {src: "./images/sponsor/2.png"},
+              {src: "./images/sponsor/3.png"},
             ]
           }),
         };
@@ -146,15 +151,49 @@ setTimeout(() => {
   });
 
   embedData.on("change", (newVal, oldVal) => {
-    if (newVal) {
+    if (newVal != oldVal && !oldVal) {
       LoadVideos(newVal.players);
+    } else { 
+      UpdateVideos(newVal.players,oldVal.players)
     }
   });
 
 
   optionsActiveData.on("change", (newVal, oldVal) => {
     if (newVal != oldVal && oldVal) {
-      location.reload();
+      temp = "#";
+      opts = newVal.crops;
+      optLayout = newVal.layout;
+      couchText = newVal.couch;
+
+      if (newVal.layout == '4') {
+        temp += "fourByThree-";
+      } else {
+        temp += "sixteenByNine-";
+      }
+      switch (newVal.crops.length) {
+        case 1:
+          temp += "One";
+          break;
+        case 2:
+          temp += "Two";
+          break;
+        case 4:
+          temp += "Four";
+          break;
+        default:
+      }
+
+      if (temp != templateName) {
+        location.reload();
+      }
+      else {
+        if (couch) couch.innerHTML = couchText;
+
+        nodecg.readReplicant("embedData", "Brat", (opt) => {
+          LoadVideos(opt.players);
+        });
+      }
     }
   });
 
@@ -171,6 +210,7 @@ setTimeout(() => {
         parent: "localhost",
         autoplay: true,
       };
+      document.getElementById("containerPlayer" + (j + 1)).innerHTML = "";
       var TwitchPlayer = new Twitch.Player("containerPlayer" + (j+1), options2);
       TwitchPlayer.setVolume(players[j].volume);
       EmbedList.push(TwitchPlayer);
@@ -193,7 +233,7 @@ setTimeout(() => {
           EmbedList[j].pause();
         }
       }
-      $(EmbedList[j]).click();
+      resize(opts[j].prop,document.getElementById("containerPlayer" + (j+1)) ,optLayout)
     }
   }
 
@@ -349,12 +389,12 @@ setTimeout(() => {
     Div.style.height = height;
 
     Div.style.marginLeft = "-" + ( cropX + ex ) + "px";
-    Div.style.marginBottom = "-" + ( cropY + 5 )+ "px";
+    Div.style.marginBottom = "-" + ( cropY + eY )+ "px";
 
 
   }
 
-  slidePat(0);
-  slidePre(0);
+  //slidePat(0);
+  //slidePre(0);
   
 }, 2000);
