@@ -1,358 +1,360 @@
 var speedcontrolBundle = "nodecg-speedcontrol";
-var gameTitle = document.getElementById("gameTitle"); // game-title.html
-var gameTitleDiv = document.getElementById("gameTitleDiv"); // game-title.html
-
-var gameCategory = document.getElementById("gameCategory"); // game-category.html
-var gameSystem = document.getElementById("gameSystem"); // game-system.html
-var gameEstimate = document.getElementById("gameEstimate"); // game-estimate.html
-var twitch = document.getElementById("twitch"); // twitch.html
-var embedData = nodecg.Replicant("embedData");
-var timerElem = document.getElementById("timer1");
-var player = document.getElementById("player1"); // player.html
-
-var timerElem2 = document.getElementById("timer2");
-var player2 = document.getElementById("player2"); // player.html
-
-var timerElem3 = document.getElementById("timer3");
-var player3 = document.getElementById("player3"); // player.html
-
-var timerElem4 = document.getElementById("timer4");
-var player4 = document.getElementById("player4"); // player.html
-
-var overlay = document.getElementById("overlay");
-
 var runDataActiveRun = nodecg.Replicant("runDataActiveRun", speedcontrolBundle);
+var optionsActiveData = nodecg.Replicant("optionsActiveData");
+var timer = nodecg.Replicant("timer", speedcontrolBundle);
 
-var elemPre = document.getElementById("premios");
-var elemPat = document.getElementById("patro");
-
-var ids = [];
-
-var playerNumber = 0;
-
-const video = document.getElementById("runnerName");
-
-var options = {
-  width: 854,
-  height: 480,
+var opts = [];
+var templateName = "";
+var optLayout = "16";
+var ex = 0;
+var  options = {
+  width: 1414,
+  height: 803,
   channel: "",
   parent: "localhost",
   autoplay: true,
   muted: false,
 };
+var couchText = "";
 
-var GameS = "";
+var videoHeight = 803;
+var videoWidth = 1414;
 
-runDataActiveRun.on("change", (newVal, oldVal) => {
-  if (newVal) updateSceneFields(newVal);
-});
 
-embedData.on("change", (newVal, oldVal) => {
-  if (newVal) {
-    var embed = document.getElementById("TPlayers");
-    if (embed.innerHTML == "") {
-      LoadVideos(newVal.players);
-    } else {
-      if (newVal.players.length != oldVal.players.length) {
-        LoadVideos(newVal.players);
-      } else {
-        UpdateVideos(newVal.players, oldVal.players);
-      }
-    }
+
+nodecg.readReplicant("optionsActiveData", "Brat", (opt) => {
+  templateName = "#";
+  console.log(opt)
+  opts = opt.crops;
+  optLayout = opt.layout;
+  couchText = opt.couch;
+
+  if (opt.layout == '4') {
+    templateName += "fourByThree-";
+  }else{
+    templateName += "sixteenByNine-";
   }
-});
-
-var EmbedList = [];
-
-function LoadVideos(players) {
-  var embed = document.getElementById("TPlayers");
-  var tags = "";
-
-  for (var j = 0; j < players.length; j++) {
-    tags += "<div id='TwitchPlayer" + j + "'></div>";
-  }
-
-  embed.innerHTML = tags;
-
-  Position(players.length);
-
-  EmbedList = [];
-  for (var j = 0; j < players.length; j++) {
-    var options2 = {
-      width: options.width,
-      height: options.height,
-      channel: players[j].channel ? players[j].channel : "brat2",
-      parent: "localhost",
-      autoplay: true,
-    };
-    var TwitchPlayer = new Twitch.Player("TwitchPlayer" + j, options2);
-    TwitchPlayer.setVolume(players[j].volume);
-    EmbedList.push(TwitchPlayer);
-  }
-}
-
-function Position(numero) {
-  timerElem.innerHTML = "00:00:00"; // timer.html
-  timerElem2.innerHTML = "00:00:00";
-  timerElem3.innerHTML = "00:00:00";
-  timerElem4.innerHTML = "00:00:00";
-
-  switch (numero) {
+  switch (opt.crops.length) { 
     case 1:
-      var tp = document.getElementById("TwitchPlayer0");
-      tp.style.position = "absolute";
-      tp.style.top = "13px";
-      tp.style.left = "492px";
-
-      options = {
-        width: 1417,
-        height: 796,
-        channel: "",
-        parent: "localhost",
-        autoplay: true,
-        muted: false,
-      };
-
+    templateName += "One";
       break;
     case 2:
-      var tp = document.getElementById("TwitchPlayer0");
-      tp.style.position = "absolute";
-      tp.style.top = "13px";
-      tp.style.left = "13px";
-
-      var tp2 = document.getElementById("TwitchPlayer1");
-      if (tp2 != null) {
-        tp2.style.position = "absolute";
-        tp2.style.top = "13px";
-        tp2.style.left = "973px";
-      }
-
-      options = {
-        width: 934,
-        height: 525,
-        channel: "",
-        parent: "localhost",
-        autoplay: true,
-        muted: false,
-      };
-
+    templateName += "Two";
       break;
-
-    case 3:
     case 4:
-      var tp = document.getElementById("TwitchPlayer0");
-      tp.style.position = "absolute";
-      tp.style.top = "9px";
-      tp.style.left = "10px";
-
-      var tp2 = document.getElementById("TwitchPlayer1");
-      if (tp2 != null) {
-        tp2.style.position = "absolute";
-        tp2.style.top = "9px";
-        tp2.style.left = "1205px";
-      }
-
-      var tp3 = document.getElementById("TwitchPlayer2");
-      if (tp3 != null) {
-        tp3.style.position = "absolute";
-        tp3.style.top = "593px";
-        tp3.style.left = "10px";
-      }
-
-      var tp4 = document.getElementById("TwitchPlayer3");
-      if (tp4 != null) {
-        tp4.style.position = "absolute";
-        tp4.style.top = "593px";
-        tp4.style.left = "1205px";
-      }
-
-      options = {
-        width: 704,
-        height: 397,
-        channel: "",
-        parent: "localhost",
-        autoplay: true,
-        muted: false,
-      };
-
+    templateName += "Four";
       break;
-
     default:
   }
 
-  timerElem.className = "timer1_layout" + numero;
-  timerElem2.className = "timer2_layout" + numero;
-  timerElem3.className = "timer3_layout" + numero;
-  timerElem4.className = "timer4_layout" + numero;
+  switch (templateName) { 
+    case "#fourByThree-One":
+      videoHeight = 940;
+      videoWidth = 1254;
+      //ex = 160
+      break;
+    case "#sixteenByNine-One":
+      videoHeight = 803;
+      videoWidth = 1414;
+      break;
+    case "#fourByThree-Two":
+      videoHeight = 940;
+      videoWidth = 1254;
+      ex = 160
+      break;
+    case"#sixteenByNine-Two":
+      videoHeight = 940;
+      videoWidth = 1254;
+      break;
+    case "#fourByThree-Four":
+      videoHeight = 940;
+      videoWidth = 1254;
+      ex = 160
+      break;
 
-  player.className = "player1_layout" + numero;
-  player2.className = "player2_layout" + numero;
-  player3.className = "player3_layout" + numero;
-  player4.className = "player4_layout" + numero;
-
-  elemPre.className = "premios_layout" + numero;
-  elemPat.className = "sponsor_layout" + numero;
-  gameEstimate.className = "estimate_layout" + numero;
-  gameSystem.className = "system_layout" + numero;
-  gameTitleDiv.className = "jogo_layout" + numero;
-  gameCategory.className = "categoria_layout" + numero;
-
-  overlay.style.backgroundImage =
-    "url('../graphics/Images/Over" + numero + ".png')";
-}
-
-function UpdateVideos(players, old) {
-  for (var j = 0; j < players.length; j++) {
-    if (players[j].channel != old[j].channel) {
-      EmbedList[j].setChannel(players[j].channel);
-    }
-    if (players[j].volume != old[j].volume) {
-      EmbedList[j].setVolume(players[j].volume);
-    }
-    if (players[j].status != old[j].status) {
-      if (players[j].status == "Play") {
-        EmbedList[j].play();
-      } else {
-        EmbedList[j].pause();
-      }
-    }
-    $(EmbedList[j]).click();
   }
-}
-
-function updateSceneFields(runData) {
-  var team = runData.teams[playerNumber - 1];
-
-  gameTitle.innerHTML = runData.game; // game-title.html
-  gameCategory.innerHTML = runData.category; // game-category.html
-  //gameSystem.className = runData.system;
-  gameSystem.style.backgroundImage =
-    "url('../graphics/Images/logos/" +
-    runData.system.replace("/", "") +
-    ".png')";
-
-  gameEstimate.innerHTML = runData.estimate; // game-estimate.html
-
-  player.innerHTML = "";
-  player2.innerHTML = "";
-  player3.innerHTML = "";
-  player4.innerHTML = "";
-
-  var count = 0;
-  ids = [];
-  for (var i = 0; i < runData.teams.length; i++) {
-    ids.push(runData.teams[i].id);
-
-    for (var j = 0; j < runData.teams[i].players.length; j++) {
-      switch (count) {
-        case 0:
-          player.innerHTML = runData.teams[i].players[j].name;
-          break;
-        case 1:
-          player2.innerHTML = runData.teams[i].players[j].name;
-          break;
-        case 2:
-          player3.innerHTML = runData.teams[i].players[j].name;
-          break;
-        case 3:
-          player4.innerHTML = runData.teams[i].players[j].name;
-          break;
-        default:
-          player.innerHTML = team.players[0].name;
-      }
-      count++;
-    }
-  }
-}
-
-var timer = nodecg.Replicant("timer", speedcontrolBundle);
-timer.on("change", (newVal, oldVal) => {
-  if (newVal) updateTimer(newVal, oldVal);
 });
 
-function updateTimer(newVal, oldVal) {
-  for (var j = 0; j < ids.length; j++) {
-    switch (j) {
-      case 0:
-        timerElem.innerHTML = newVal.time; // timer.html
-        break;
-      case 1:
-        timerElem2.innerHTML = newVal.time; // timer.html
-        break;
-      case 2:
-        timerElem3.innerHTML = newVal.time; // timer.html
-        break;
-      case 3:
-        timerElem4.innerHTML = newVal.time; // timer.html
-        break;
+
+setTimeout(() => {
+  const App = {
+          template: templateName,
+          data: () => ({
+            timer1: "00:00:00",
+            timer2: "00:00:00",
+            timer3: "00:00:00",
+            timer4: "00:00:00",
+            donations: "000.000,00",
+            player1: "player 1",
+            player2: "player 2",
+            player3: "player 3",
+            player4: "player 4",
+            couch: "hey hey, hey hey, hey hey",
+            game: "STORY OF SEASONS Friends of Mineral Town",
+            cat: "Crash Bandicoot 2: Cortex Strikes Back - Any%",
+            plat: "n64",
+            est: "00:00:00",
+            camera: false,
+            bar: [
+              {title: "Title",subtitle: "Subtitle", inc: false, val1: "10", val2: "20"},
+              {title: "Title",subtitle: "Subtitle", inc: true, val1: "10", val2: "20"},
+              {title: "Title",subtitle: "Subtitle", inc: true, val1: "10", val2: "20"},
+              {title: "Title",subtitle: "Subtitle", inc: true, val1: "10", val2: "20"}
+            ],
+            sponsors: [
+              {src: "./images/sponsor/1.png"},
+              {src: "./images/sponsor/2.png"},
+            ]
+          }),
+        };
+
+        var layout = new Vue({
+          vuetify: new Vuetify(),
+          render: (h) => h(App),
+      }).$mount("#app");
+
+  var gameTitle = document.getElementById("gameTitle"); // game-title.html
+
+  var gameCategory = document.getElementById("gameCategory"); // game-category.html
+  var gameSystem = document.getElementById("gameSystem"); // game-system.html
+  var gameEstimate = document.getElementById("gameEstimate"); // game-estimate.html
+  var embedData = nodecg.Replicant("embedData");
+  var timerElem = document.getElementById("timer1");
+  var player = document.getElementById("player1"); // player.html
+
+  var timerElem2 = document.getElementById("timer2");
+  var player2 = document.getElementById("player2"); // player.html
+
+  var timerElem3 = document.getElementById("timer3");
+  var player3 = document.getElementById("player3"); // player.html
+
+  var timerElem4 = document.getElementById("timer4");
+  var player4 = document.getElementById("player4"); // player.html
+
+
+  var elemPre = document.getElementById("premios");
+  var elemPat = document.getElementById("patro");
+  var couch = document.getElementById("couch");
+  if(couch) couch.innerHTML = couchText;
+
+  var ids = [];
+
+  var playerNumber = 0;
+
+  runDataActiveRun.on("change", (newVal, oldVal) => {
+    if (newVal) updateSceneFields(newVal);
+  });
+
+  embedData.on("change", (newVal, oldVal) => {
+    if (newVal) {
+      LoadVideos(newVal.players);
+    }
+  });
+
+
+  optionsActiveData.on("change", (newVal, oldVal) => {
+    if (newVal != oldVal && oldVal) {
+      location.reload();
+    }
+  });
+
+
+  var EmbedList = [];
+
+  function LoadVideos(players) {
+    EmbedList = [];
+    for (var j = 0; j < players.length; j++) {
+      var options2 = {
+        width: options.width,
+        height: options.height,
+        channel: players[j].channel ? players[j].channel : "brat2",
+        parent: "localhost",
+        autoplay: true,
+      };
+      var TwitchPlayer = new Twitch.Player("containerPlayer" + (j+1), options2);
+      TwitchPlayer.setVolume(players[j].volume);
+      EmbedList.push(TwitchPlayer);
+      resize(opts[j].prop,document.getElementById("containerPlayer" + (j+1)) ,optLayout)
     }
   }
-  if (newVal.teamFinishTimes) {
-    for (var j = 0; j < ids.length; j++) {
-      if (newVal.teamFinishTimes[ids[j]]) {
-        switch (j) {
+
+  function UpdateVideos(players, old) {
+    for (var j = 0; j < players.length; j++) {
+      if (players[j].channel != old[j].channel) {
+        EmbedList[j].setChannel(players[j].channel);
+      }
+      if (players[j].volume != old[j].volume) {
+        EmbedList[j].setVolume(players[j].volume);
+      }
+      if (players[j].status != old[j].status) {
+        if (players[j].status == "Play") {
+          EmbedList[j].play();
+        } else {
+          EmbedList[j].pause();
+        }
+      }
+      $(EmbedList[j]).click();
+    }
+  }
+
+  function updateSceneFields(runData) {
+    var team = runData.teams[playerNumber - 1];
+
+    if (gameTitle) gameTitle.innerHTML = runData.game; // game-title.html
+    if (gameCategory) gameCategory.innerHTML = runData.category; // game-category.html
+    //gameSystem.className = runData.system;
+    if (gameSystem) gameSystem.style.backgroundImage =
+      "url('../graphics/Images/logos/" +
+      runData.system.replace("/", "") +
+      ".png')";
+
+    if (gameEstimate) gameEstimate.innerHTML = runData.estimate; // game-estimate.html
+
+    if (player) player.innerHTML = "";
+    if (player2) player2.innerHTML = "";
+    if (player3) player3.innerHTML = "";
+    if (player4) player4.innerHTML = "";
+
+    var count = 0;
+    ids = [];
+    for (var i = 0; i < runData.teams.length; i++) {
+      ids.push(runData.teams[i].id);
+
+      for (var j = 0; j < runData.teams[i].players.length; j++) {
+        switch (count) {
           case 0:
-            timerElem.innerHTML = newVal.teamFinishTimes[ids[j]].time; // timer.html
+            if (player) player.innerHTML = runData.teams[i].players[j].name;
             break;
           case 1:
-            timerElem2.innerHTML = newVal.teamFinishTimes[ids[j]].time; // timer.html
+            if (player2) player2.innerHTML = runData.teams[i].players[j].name;
             break;
           case 2:
-            timerElem3.innerHTML = newVal.teamFinishTimes[ids[j]].time; // timer.html
+            if (player3) player3.innerHTML = runData.teams[i].players[j].name;
             break;
           case 3:
-            timerElem4.innerHTML = newVal.teamFinishTimes[ids[j]].time; // timer.html
+            if (player4) player4.innerHTML = runData.teams[i].players[j].name;
             break;
+          default:
+            if (player) player.innerHTML = team.players[0].name;
+        }
+        count++;
+      }
+    }
+  }
+
+  timer.on("change", (newVal, oldVal) => {
+    if (newVal) updateTimer(newVal, oldVal);
+  });
+
+  function updateTimer(newVal, oldVal) {
+    for (var j = 0; j < ids.length; j++) {
+      switch (j) {
+        case 0:
+          if (timerElem) timerElem.innerHTML = newVal.time; // timer.html
+          break;
+        case 1:
+          if (timerElem2) timerElem2.innerHTML = newVal.time; // timer.html
+          break;
+        case 2:
+          if (timerElem3) timerElem3.innerHTML = newVal.time; // timer.html
+          break;
+        case 3:
+          if (timerElem4) timerElem4.innerHTML = newVal.time; // timer.html
+          break;
+      }
+    }
+    if (newVal.teamFinishTimes) {
+      for (var j = 0; j < ids.length; j++) {
+        if (newVal.teamFinishTimes[ids[j]]) {
+          switch (j) {
+            case 0:
+              if (timerElem) timerElem.innerHTML = newVal.teamFinishTimes[ids[j]].time; // timer.html
+              break;
+            case 1:
+              if (timerElem2) timerElem2.innerHTML = newVal.teamFinishTimes[ids[j]].time; // timer.html
+              break;
+            case 2:
+              if (timerElem3) timerElem3.innerHTML = newVal.teamFinishTimes[ids[j]].time; // timer.html
+              break;
+            case 3:
+              if (timerElem4) timerElem4.innerHTML = newVal.teamFinishTimes[ids[j]].time; // timer.html
+              break;
+          }
         }
       }
     }
   }
-}
 
-function slidePat(id) {
-  var next = id + 1;
+  function slidePat(id) {
+    var next = id + 1;
 
-  var nexturl = "Images/Patro/Pat" + (next > 9 ? next : "0" + next) + ".jpg";
+    var nexturl = "Images/Patro/Pat" + (next > 9 ? next : "0" + next) + ".jpg";
 
-  if (!imageExists(nexturl)) {
-    next = 0;
+    if (!imageExists(nexturl)) {
+      next = 0;
+    }
+
+    nexturl = "Images/Patro/Pat" + (next > 9 ? next : "0" + next) + ".jpg";
+
+    if(elemPat) elemPat.src = nexturl;
+
+    setTimeout(function () {
+      slidePat(next);
+    }, 5000);
   }
 
-  nexturl = "Images/Patro/Pat" + (next > 9 ? next : "0" + next) + ".jpg";
+  function slidePre(id) {
+    var next = id + 1;
 
-  elemPat.src = nexturl;
+    var nexturl = "Images/Premios/Pre" + (next > 9 ? next : "0" + next) + ".jpg";
 
-  setTimeout(function () {
-    slidePat(next);
-  }, 5000);
-}
+    if (!imageExists(nexturl)) {
+      next = 0;
+    }
 
-function slidePre(id) {
-  var next = id + 1;
+    nexturl = "Images/Premios/Pre" + (next > 9 ? next : "0" + next) + ".jpg";
 
-  var nexturl = "Images/Premios/Pre" + (next > 9 ? next : "0" + next) + ".jpg";
+    if(elemPre) elemPre.src = nexturl;
 
-  if (!imageExists(nexturl)) {
-    next = 0;
+    setTimeout(function () {
+      slidePre(next);
+    }, 5000);
   }
 
-  nexturl = "Images/Premios/Pre" + (next > 9 ? next : "0" + next) + ".jpg";
+  function imageExists(image_url) {
+    var http = new XMLHttpRequest();
 
-  elemPre.src = nexturl;
+    http.open("HEAD", image_url, false);
+    http.send();
 
-  setTimeout(function () {
-    slidePre(next);
-  }, 5000);
-}
+    return http.status != 404;
+  }
 
-function imageExists(image_url) {
-  var http = new XMLHttpRequest();
+  function resize(value, Div, lay) {
+    var tocrop = 100 - value;
+    
+    var width = videoWidth;
+    var height = videoHeight;
 
-  http.open("HEAD", image_url, false);
-  http.send();
+    width = height * 16 / 9;
 
-  return http.status != 404;
-}
+    cropX = (tocrop / 100) * width;
+    cropY = (tocrop / 100) * height;
 
-slidePat(0);
-slidePre(0);
+    Div.firstChild.style.width = width + cropX + "px";
+    Div.firstChild.style.height = height + cropY + "px";
+
+    Div.style.overflow = "hidden";
+    Div.style.width = width - ex;
+    Div.style.height = height;
+
+    Div.style.marginLeft = "-" + ( cropX + ex ) + "px";
+    Div.style.marginBottom = "-" + ( cropY + 5 )+ "px";
+
+
+  }
+
+  slidePat(0);
+  slidePre(0);
+  
+}, 2000);

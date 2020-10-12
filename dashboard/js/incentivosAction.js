@@ -13,6 +13,9 @@ nodecg.readReplicant("incentUrl", (value) => {
   UrlElement.value = actualUrl;
 });
 
+
+
+setTimeout(() => {
 function reorder() {
   nodecg.readReplicant("runDataArray", "nodecg-speedcontrol", (runArray) => {
     nodecg.readReplicant("incentData", (incentArray) => {
@@ -169,3 +172,5 @@ function loop() {
   }, 5000);
 }
 loop();
+
+}, 1000);

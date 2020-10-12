@@ -19,59 +19,20 @@
 	
 <div id="canvas" style="border:0;width:1920px ; height:1080px;">
 
-	<div id="TPlayers"></div>
+	<input type="text" id="HostName"/>
+	<button onclick="HostUpdate()">Salvar</button>
 
-	<span id="player1"></span>
-	<span id="player2"></span>
-	<span id="player3"></span>
-	<span id="player4"></span> 
-	
-	<span id="timer1"></span>
-	<span id="timer2"></span>
-	<span id="timer3"></span>
-	<span id="timer4"></span>
-	
-	<span id="gameTitle"></span>
-	<span id="gameCategory"></span>
-	<span id="gameEstimate"></span>
-	<div id="overlay"></div>
-	<div id="gameSystem"></div>
-	<div id="omnibar"></div>
+	<div class = "runContainer">
+		<div class = "Jogo"></div>
+		<div class="Runners">
+			<div class="Runner"></div>
+		</div>
+		<div class="Estimate"></div>
+		<div class="Couch"></div>
+	</div>
+
 
 </div>
-	
-	<script src="teste.js"></script>
-	<script src="omnibar.js"></script>
-	<script src="fitty.js"></script>
-	<script type="module" src="https://unpkg.com/x-frame-bypass"></script>
-	<style>
-		@font-face {
-		  font-family: principal;
-		  src: url('../graphics/Fonts/Seven.ttf');
-		}
-
-		body {
-		  font-family: principal;
-		  background-color:#171513;
-			overflow: hidden;
-		}
-		
-		#overlay{
-			position:absolute;
-			height:1080px;
-			width:1920px;
-			top:0;
-			left:0;
-		}
-		
-		
-		.OverSingle{
-		
-			background-image:url('../graphics/Images/Over.png')
-		}
-			
-		
-	</style>
-	
+	<script src="hosts.js"></script>
 </body>
 </html>

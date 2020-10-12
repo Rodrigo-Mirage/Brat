@@ -39,7 +39,7 @@ function open() {
   Player.setVolume("0.0");
   sliderDiv.value = prop;
   myRange.value = prop;
-  resize(prop);
+  resize(prop,VideoDiv);
 }
 document.addEventListener("dialog-confirmed", function () {
   VideoDiv.innerHTML = "";
@@ -49,7 +49,6 @@ document.addEventListener("dialog-confirmed", function () {
     layout: layout,
     prop: prop,
   };
-  console.log(data);
 
   var newList = [];
   nodecg.readReplicant("optionsData", "Brat", (optionsOld) => {
@@ -86,16 +85,16 @@ document.addEventListener("dialog-opened", function () {
 myRange.onchange = function () {
   prop = this.value;
   sliderDiv.value = prop;
-  resize(this.value);
+  resize(this.value,VideoDiv);
 };
 
 sliderDiv.onchange = function () {
+  prop = this.value;
   myRange.value = this.value;
-  resize(this.value);
+  resize(this.value,VideoDiv);
 };
 
-function resize(value) {
-  prop = value;
+function resize(value,Div) {
   var tocrop = 100 - value;
   cropX = (tocrop / 100) * width;
   cropY = (tocrop / 100) * height;
@@ -106,6 +105,6 @@ function resize(value) {
   crop.style.marginLeft = "-" + (cropX + lay) + "px";
   crop.style.marginBottom = "-" + cropY + "px";
 
-  VideoDiv.firstChild.style.width = width + cropX + "px";
-  VideoDiv.firstChild.style.height = height + cropY + "px";
+  Div.firstChild.style.width = width + cropX + "px";
+  Div.firstChild.style.height = height + cropY + "px";
 }

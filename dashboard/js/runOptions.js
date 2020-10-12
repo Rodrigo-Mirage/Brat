@@ -8,14 +8,17 @@ var speedcontrolBundle = "nodecg-speedcontrol";
 var runDataActiveRun = nodecg.Replicant("runDataActiveRun", speedcontrolBundle);
 var runDataArray = nodecg.Replicant("runDataArray", speedcontrolBundle);
 
-const idRun = document.getElementById("idRun");
+var idRun = 0;
+var idNextRun = 0;
 const gameName = document.getElementById("gameName");
+const couch = document.getElementById("couch");
 const layout = document.getElementById("layout");
 const crop = document.getElementById("crops");
 
 const gameNameNext = document.getElementById("gameNameNext");
 const layoutNext = document.getElementById("layoutNext");
 const cropNext = document.getElementById("cropsNext");
+const couchNext = document.getElementById("couchNext");
 
 optionsData.on("change", (newVal, oldVal) => {
   if (newVal != oldVal) {
@@ -54,7 +57,7 @@ optionsActiveData.on("change", (newVal, oldVal) => {
           htmlCrops += "<br>";
         }
         htmlCrops +=
-          '<button class=nodecg-configure" class="nodecg-configure" nodecg-dialog="setCrop" onclick="openCrop(\'' +
+          '<button class="nodecg-configure round-button" nodecg-dialog="setCrop" onclick="openCrop(\'' +
           newVal.idRun +
           "','" +
           crop.channel +
@@ -66,6 +69,7 @@ optionsActiveData.on("change", (newVal, oldVal) => {
       });
       crop.innerHTML = htmlCrops;
     }
+    couch.value = (newVal.couch ? newVal.couch : "");
   }
 });
 
@@ -87,7 +91,7 @@ optionsNextData.on("change", (newVal, oldVal) => {
         }
 
         htmlCrops +=
-          '<button class=nodecg-configure" class="nodecg-configure" nodecg-dialog="setCrop" onclick="openCrop(\'' +
+          '<button class="nodecg-configure round-button" nodecg-dialog="setCrop" onclick="openCrop(\'' +
           newVal.idRun +
           "','" +
           crop.channel +
@@ -99,6 +103,8 @@ optionsNextData.on("change", (newVal, oldVal) => {
       });
       cropNext.innerHTML = htmlCrops;
     }
+    couchNext.value = (newVal.couch ? newVal.couch : "");
+
   }
 });
 
@@ -158,10 +164,12 @@ function SetActive(activeRun) {
     optionsOld.forEach((opt) => {
       if (next) {
         optionsNextData.value = opt;
+        idNextRun = opt.idRun
         next = false;
       }
       if (opt.idRun == activeRun.id) {
         optionsActiveData.value = opt;
+        idRun = opt.idRun
         next = true;
       }
     });
@@ -178,6 +186,28 @@ function SetRatio(id, layout) {
         } else {
           run.layout = "16";
         }
+      }
+      newList.push(run);
+    });
+    optionsData.value = newList;
+  });
+}
+
+function SetCouch(act) {
+  var test = 0;
+  if (act) {
+    ch = couch.value
+    test = idRun
+  } else { 
+    ch = couchNext.value
+    test = idNextRun
+  }
+
+  var newList = [];
+  nodecg.readReplicant("optionsData", "Brat", (optionsOld) => {
+    optionsOld.forEach((run) => {
+      if (test == run.idRun) {
+        run.couch = ch;
       }
       newList.push(run);
     });
