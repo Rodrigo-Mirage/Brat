@@ -139,52 +139,58 @@ function SetAll(runs) {
 
   var newList = [];
   nodecg.readReplicant("optionsData", "Brat", (optionsOld) => {
-    optList.forEach((opt) => {
-      optionsOld.forEach((old) => {
-        if (opt.idRun == old.idRun) {
-          opt.layout = old.layout;
-          opt.gameName = old.gameName;
-          opt.crops = old.crops;
-        }
+    if (optionsOld) {
+      optList.forEach((opt) => {
+        optionsOld.forEach((old) => {
+          if (opt.idRun == old.idRun) {
+            opt.layout = old.layout;
+            opt.gameName = old.gameName;
+            opt.crops = old.crops;
+          }
+        });
+        newList.push(opt);
       });
-      newList.push(opt);
-    });
-    optionsData.value = newList;
-  });
+      optionsData.value = newList;
+    }
+  }); 
 }
 
 function SetActive(activeRun) {
   var next = false;
   nodecg.readReplicant("optionsData", "Brat", (optionsOld) => {
-    optionsOld.forEach((opt) => {
-      if (next) {
-        optionsNextData.value = opt;
-        idNextRun = opt.idRun
-        next = false;
-      }
-      if (opt.idRun == activeRun.id) {
-        optionsActiveData.value = opt;
-        idRun = opt.idRun
-        next = true;
-      }
-    });
+    if (optionsOld) {
+      optionsOld.forEach((opt) => {
+        if (next) {
+          optionsNextData.value = opt;
+          idNextRun = opt.idRun
+          next = false;
+        }
+        if (opt.idRun == activeRun.id) {
+          optionsActiveData.value = opt;
+          idRun = opt.idRun
+          next = true;
+        }
+      });
+    }
   });
 }
 
 function SetRatio(id, layout) {
   var newList = [];
   nodecg.readReplicant("optionsData", "Brat", (optionsOld) => {
-    optionsOld.forEach((run) => {
-      if (id == run.idRun) {
-        if (layout == "16") {
-          run.layout = "4";
-        } else {
-          run.layout = "16";
+    if (optionsOld) {
+      optionsOld.forEach((run) => {
+        if (id == run.idRun) {
+          if (layout == "16") {
+            run.layout = "4";
+          } else {
+            run.layout = "16";
+          }
         }
-      }
-      newList.push(run);
-    });
-    optionsData.value = newList;
+        newList.push(run);
+      });
+      optionsData.value = newList;
+    }
   });
 }
 

@@ -149,9 +149,13 @@ var incentivos = [];
 				} else { 
 					inCount += 1;
 				}
-				setTimeout(() => {
-					loopIncs();
-				}, 5000);
+				if (lopCont != 0) {
+					setTimeout(() => {
+						loopIncs();
+					}, 5000);
+				} else { 
+					loop();
+				}
 			}
 		}
 	}
