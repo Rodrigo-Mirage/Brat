@@ -137,17 +137,19 @@ function getnext(run) {
 
   nodecg.readReplicant("incentData", (value) => {
     console.log(value)
-      var nextincs = [];
-      var inject = false;
-      for (var i = 0; i < value.length; i++) {
-        if (inject) {
-          nextincs.push(value[i]);
-
-          if (nextincs.length == 4) {
-            break;
-          }
-        }
+    var nextincs = [];
+    var idlist = [];
+    var id = "";
+    for (var i = 0; i < value.length; i++) {
+      nextincs.push(value[i]);
+      if (id != value[i].runID) { 
+        idlist.push(value[i].runID);
+        id = value[i].runID;
       }
-      next4incs.value = nextincs;
+      if (idlist.length == 4) {
+        break;
+      }
+    }
+    next4incs.value = nextincs;
   });
 }

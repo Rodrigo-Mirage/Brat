@@ -14,11 +14,24 @@
 
 	var oldDonate = 0;
 	
-	var slideStep= 0;
+var slideStep = 0;
+	
+var incentivos = [];
 
 	//setup();
 	
 	
+		
+	next4incs.on('change', (newVal, oldVal) => {
+		if (newVal)
+		{
+			incentivos = [];
+			newVal.forEach(element => {
+				incentivos.push(element);
+			});
+		}
+	});
+		
 
 	
 	setTimeout(() => {
@@ -37,14 +50,6 @@
 			}
 		});
 		
-		next4incs.on('change', (newVal, oldVal) => {
-			if (newVal)
-			{
-				setIncs(newVal);
-			}
-		});
-		
-		
 		
 
 		loop();
@@ -52,7 +57,7 @@
 	}, 2000);
 	
 	var	lopCont = 0;
-
+	var inCount = 0;
 	function loop() { 
 		var nextRuns = document.getElementById("nextRuns"); 
 		var nextIncs = document.getElementById("nextIncs"); 
@@ -62,7 +67,6 @@
 		if (nextIncs) nextIncs.style.display = "none";
 		if (nextRunsAlert) nextRunsAlert.style.display = "none";
 		if (nextIncsAlert) nextIncsAlert.style.display = "none";
-		lopCont = 3
 		switch (lopCont) { 
 			case 0:
 			if (nextRunsAlert) nextRunsAlert.style.display = "flex";
@@ -91,24 +95,69 @@
 			case 3:
 				if (nextIncs) nextIncs.style.display = "flex";
 				lopCont = 0;
-				loopIncs()
+				loopIncs()	
 			break;
 				
 		}
 	}
-	
 	function loopIncs() { 
-		nodecg.readReplicant("next4incs", "Brat", (incs) => {
-			console.log(incs)
-			document.getElementById("incBox1").style.display = "none";
-			document.getElementById("incBox2").style.display = "none";
-			document.getElementById("incBox3").style.display = "none";
-			document.getElementById("incBox4").style.display = "none";
-			for (var i = 0; i < incs.length; i++){
-
-			}
-		});
+		document.getElementById("incBox1").style.display = "none";
+		document.getElementById("incBox2").style.display = "none";
+		document.getElementById("incBox3").style.display = "none";
+		document.getElementById("incBox4").style.display = "none";
+		loadIncs(inCount)
 	}
+	
+	function loadIncs(count) { 	
+		for (var i = 0; i < incentivos.length; i++){
+			if (i == count) { 
+				if (incentivos[i].type == "Arc") { 
+					document.getElementById("incBox1").style.display = "flex";
+					var incGame  = document.getElementById("incGame1");
+					var incname  = document.getElementById("incName1");
+					var incVal   = document.getElementById("incVal1");
+					incGame.innerHTML = incentivos[i].game;
+					incname.innerHTML = incentivos[i].name;
+					if(incVal) incVal.innerHTML  = incentivos[i].valueA + " / " + incentivos[i].valueB;
+				}
+				if (incentivos[i].type == "Mod") { 
+					var box = 1
+					document.getElementById("incBox1").style.display = "flex";
+					var incGame  = document.getElementById("incGame1");
+					var Incname  = document.getElementById("incName1");
+					var incVal   = document.getElementById("incVal1");
+					incGame.innerHTML = incentivos[i].game;
+					Incname.innerHTML = incentivos[i].name;
+					if(incVal) incVal.innerHTML  = "";
+					box += 1;
+					for (var j = 0; j < incentivos[i].options.length; j++) { 
+						if (incentivos[i].options[j].name != "") {
+							document.getElementById("incBox"+box).style.display = "flex";
+							var incGame2  = document.getElementById("incGame" + box);
+							var incname2  = document.getElementById("incName" + box);
+							var incVal2   = document.getElementById("incVal" + box);
+							incGame2.innerHTML = incentivos[i].options[j].name;
+							incname2.innerHTML = "";
+							if(incVal2) incVal2.innerHTML  = incentivos[i].options[j].value;
+							box += 1;
+						}
+					}
+				}
+				if (i == incentivos.length) {
+					inCount = 0;
+					lopCont = 0;
+				} else { 
+					inCount += 1;
+				}
+				setTimeout(() => {
+					loopIncs();
+				}, 5000);
+			}
+		}
+	}
+
+
+
 	
 	function setup(){
 		
