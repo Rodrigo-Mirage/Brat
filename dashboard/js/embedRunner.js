@@ -5,11 +5,20 @@ var runDataActiveRun = nodecg.Replicant("runDataActiveRun", speedcontrolBundle);
 var next4runs = nodecg.Replicant("next4runs");
 var next4incs = nodecg.Replicant("next4incs");
 var incentData = nodecg.Replicant("incentData");
+var donateTotal = nodecg.Replicant("donateTotal");
 
 runDataActiveRun.on("change", (newVal, oldVal) => {
   if (newVal) {
     updateSceneFields(newVal);
     getnext(newVal);
+  }
+});
+
+donateTotal.on("change", (newVal, oldVal) => {
+  if (newVal) {
+    nodecg.readReplicant("runDataActiveRun",speedcontrolBundle, (value) => {
+      getnext(value);
+    });
   }
 });
 
@@ -133,23 +142,17 @@ function getnext(run) {
       }
     }
     next4runs.value = nextruns;
-  });
-
-  nodecg.readReplicant("incentData", (value) => {
-    console.log(value)
-    var nextincs = [];
-    var idlist = [];
-    var id = "";
-    for (var i = 0; i < value.length; i++) {
-      nextincs.push(value[i]);
-      if (id != value[i].runID) { 
-        idlist.push(value[i].runID);
-        id = value[i].runID;
-      }
-      if (idlist.length == 4) {
-        break;
-      }
-    }
-    next4incs.value = nextincs;
+    nodecg.readReplicant("incentData", (value2) => {
+        var nextincs = [];
+        for (var i = 0; i < value2.length; i++) {
+          for (var j = 0; j < nextruns.length; j++) {
+            if (value2[i].runID == nextruns[j].id) {
+              console.log(value2[i].runID, nextruns[j].id);
+              nextincs.push(value2[i]);
+            }
+          }
+        }
+        next4incs.value = nextincs;
+    });
   });
 }

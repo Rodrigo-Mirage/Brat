@@ -10,6 +10,8 @@ var sliderDiv = document.getElementById("sliderAmount");
 var height = 381;
 var width = 679;
 var lay = 0;
+    crop.style.width = width + "px";
+    crop.style.height = height + "px";
 //508
 
 var prop = 100;
@@ -19,6 +21,8 @@ var layout;
 
 var cropX = 0;
 var cropY = 0;
+
+var cam = false;
 
 function open() {
   var options = {
@@ -31,7 +35,8 @@ function open() {
   };
   if (layout == "4") {
     lay = 171;
-  } else {
+  }
+  if (layout == "16") {
     lay = 0;
   }
 
@@ -54,13 +59,15 @@ document.addEventListener("dialog-confirmed", function () {
   nodecg.readReplicant("optionsData", "Brat", (optionsOld) => {
     optionsOld.forEach((run) => {
       if (data.id == run.idRun) {
-        console.log(run);
-        run.crops.forEach((crop) => {
-          console.log(crop);
-          if (data.channel == crop.channel) {
-            crop.prop = data.prop;
-          }
-        });
+        if (cam) {
+          run.camProp = prop;
+        } else { 
+          run.crops.forEach((crop) => {
+            if (data.channel == crop.channel) {
+              crop.prop = data.prop;
+            }
+          });
+        }
       }
       newList.push(run);
     });
@@ -78,6 +85,11 @@ document.addEventListener("dialog-opened", function () {
     channel = crop.channel;
     layout = crop.layout;
     prop = crop.prop;
+    if (crop.layout) {
+      cam = false;
+    } else { 
+      cam = true;
+    }
     open();
   });
 });
@@ -100,11 +112,14 @@ function resize(value,Div) {
   cropY = (tocrop / 100) * height;
 
   crop.style.overflow = "hidden";
-  crop.style.width = width - lay;
-  crop.style.height = height;
-  crop.style.marginLeft = "-" + (cropX + lay) + "px";
-  crop.style.marginBottom = "-" + cropY + "px";
+  if (cam) {
+    Div.firstChild.style.marginTop = "-" + cropY  + "px";
+  } else { 
+    Div.firstChild.style.marginLeft = "-" + ((cropX) + lay) + "px";
+    Div.firstChild.style.marginBottom = "-" + ( cropY)+ "px";
+  }
 
-  Div.firstChild.style.width = width + cropX + "px";
+  Div.firstChild.style.width = width + cropX  + "px";
   Div.firstChild.style.height = height + cropY + "px";
+  
 }

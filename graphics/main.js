@@ -3,6 +3,7 @@ var runDataActiveRun = nodecg.Replicant("runDataActiveRun", speedcontrolBundle);
 var optionsActiveData = nodecg.Replicant("optionsActiveData");
 var timer = nodecg.Replicant("timer", speedcontrolBundle);
 
+
 var opts = [];
 var templateName = "";
 var optLayout = "16";
@@ -20,7 +21,13 @@ var couchText = "";
 
 var videoHeight = 803;
 var videoWidth = 1414;
+var camHeight = 258;
+var camWidth = 458;
+var hascam = false;
+var campProp = 100;
 
+var randomLayout = null;
+var randoTracker = nodecg.Replicant("randoTracker");
 
 
 nodecg.readReplicant("optionsActiveData", "Brat", (opt) => {
@@ -28,6 +35,7 @@ nodecg.readReplicant("optionsActiveData", "Brat", (opt) => {
   opts = opt.crops;
   optLayout = opt.layout;
   couchText = opt.couch;
+  campProp = opt.camProp;
 
   if (opt.layout == '4') {
     templateName += "fourByThree-";
@@ -46,17 +54,33 @@ nodecg.readReplicant("optionsActiveData", "Brat", (opt) => {
       break;
     default:
   }
+  if (opt.cam) { 
+    templateName += "-Cam";
+  }
+  if (opt.rando) {
+    templateName += "-Rando-" + opt.rando;
+    randomLayout = opt.rando;
+  }
+
 
   switch (templateName) { 
     case "#fourByThree-One":
       videoHeight = 940;
       videoWidth = 1254;
-      //ex = 160
+      ex = 420;
       eY = 5;
       break;
     case "#sixteenByNine-One":
       videoHeight = 803;
       videoWidth = 1414;
+      eY = 5;
+      break;
+    case "#sixteenByNine-One-Cam":
+      videoHeight = 803;
+      videoWidth = 1414;
+      camHeight = 255;
+      camWidth = 458;
+      hascam = true;
       eY = 5;
       break;
     case "#fourByThree-Two":
@@ -75,6 +99,12 @@ nodecg.readReplicant("optionsActiveData", "Brat", (opt) => {
       ex = 204;
       ey = 0;
       break;
+    case "#fourByThree-One-Rando-OOT":
+      videoHeight = 940;
+      videoWidth = 1254;
+      ex = 420;
+      eY = 5;
+      break;
   }
 });
 
@@ -82,41 +112,42 @@ nodecg.readReplicant("optionsActiveData", "Brat", (opt) => {
 
 setTimeout(() => {
   const App = {
-          template: templateName,
-          data: () => ({
-            timer1: "00:00:00",
-            timer2: "00:00:00",
-            timer3: "00:00:00",
-            timer4: "00:00:00",
-            donations: "000.000,00",
-            player1: "player 1",
-            player2: "player 2",
-            player3: "player 3",
-            player4: "player 4",
-            couch: "hey hey, hey hey, hey hey",
-            game: "STORY OF SEASONS Friends of Mineral Town",
-            cat: "Crash Bandicoot 2: Cortex Strikes Back - Any%",
-            plat: "n64",
-            est: "00:00:00",
-            camera: false,
-            bar: [
-              {title: "Title",subtitle: "Subtitle", inc: false, val1: "10", val2: "20"},
-              {title: "Title",subtitle: "Subtitle", inc: true, val1: "10", val2: "20"},
-              {title: "Title",subtitle: "Subtitle", inc: true, val1: "10", val2: "20"},
-              {title: "Title",subtitle: "Subtitle", inc: true, val1: "10", val2: "20"}
-            ],
-            sponsors: [
-              {src: "./images/sponsor/1.png"},
-              {src: "./images/sponsor/2.png"},
-              {src: "./images/sponsor/3.png"},
-            ]
-          }),
-        };
+      template: templateName,
+      data: () => ({
+        timer1: "00:00:00",
+        timer2: "00:00:00",
+        timer3: "00:00:00",
+        timer4: "00:00:00",
+        donations: "000.000,00",
+        player1: "player 1",
+        player2: "player 2",
+        player3: "player 3",
+        player4: "player 4",
+        couch: "hey hey, hey hey, hey hey",
+        game: "STORY OF SEASONS Friends of Mineral Town",
+        cat: "Crash Bandicoot 2: Cortex Strikes Back - Any%",
+        plat: "n64",
+        est: "00:00:00",
+        camera: false,
+        bar: [
+          {title: "Title",subtitle: "Subtitle", inc: false, val1: "10", val2: "20"},
+          {title: "Title",subtitle: "Subtitle", inc: true, val1: "10", val2: "20"},
+          {title: "Title",subtitle: "Subtitle", inc: true, val1: "10", val2: "20"},
+          {title: "Title",subtitle: "Subtitle", inc: true, val1: "10", val2: "20"}
+        ],
+        sponsors: [
+          {src: "./images/sponsor/1.png"},
+          {src: "./images/sponsor/2.png"},
+          {src: "./images/sponsor/3.png"},
+          {src: "./images/sponsor/4.png"},
+        ]
+      }),
+    };
 
-        var layout = new Vue({
-          vuetify: new Vuetify(),
-          render: (h) => h(App),
-      }).$mount("#app");
+  var layout = new Vue({
+      vuetify: new Vuetify(),
+      render: (h) => h(App),
+  }).$mount("#app");
 
   var gameTitle = document.getElementById("gameTitle"); // game-title.html
 
@@ -147,14 +178,16 @@ setTimeout(() => {
   var playerNumber = 0;
 
   runDataActiveRun.on("change", (newVal, oldVal) => {
-    if (newVal) updateSceneFields(newVal);
+    if (newVal != oldVal && !oldVal)  updateSceneFields(newVal);
   });
 
   embedData.on("change", (newVal, oldVal) => {
     if (newVal != oldVal && !oldVal) {
       LoadVideos(newVal.players);
     } else { 
-      UpdateVideos(newVal.players,oldVal.players)
+      if (newVal != oldVal) {
+        UpdateVideos(newVal.players, oldVal.players)
+      }
     }
   });
 
@@ -184,15 +217,15 @@ setTimeout(() => {
         default:
       }
 
+      if (newVal.rando) {
+        temp += "-Rando-"+newVal.rando;
+      }
+
       if (temp != templateName) {
         location.reload();
       }
       else {
         if (couch) couch.innerHTML = couchText;
-
-        nodecg.readReplicant("embedData", "Brat", (opt) => {
-          LoadVideos(opt.players);
-        });
       }
     }
   });
@@ -209,12 +242,42 @@ setTimeout(() => {
         channel: players[j].channel ? players[j].channel : "brat2",
         parent: "localhost",
         autoplay: true,
+        muted: true
       };
-      document.getElementById("containerPlayer" + (j + 1)).innerHTML = "";
-      var TwitchPlayer = new Twitch.Player("containerPlayer" + (j+1), options2);
-      TwitchPlayer.setVolume(players[j].volume);
-      EmbedList.push(TwitchPlayer);
-      resize(opts[j].prop,document.getElementById("containerPlayer" + (j+1)) ,optLayout)
+      
+      var div = document.getElementById("containerPlayer" + (j + 1));
+      div.innerHTML = "";
+
+      if (div) { 
+        var TwitchPlayer = new Twitch.Player("containerPlayer" + (j + 1), options2);
+
+        EmbedList.push(TwitchPlayer);
+        resize(opts[j].prop, div, false);
+
+        TwitchPlayer.setVolume(0);
+
+        if (players[j].volume != "0.0") {
+          console.log(parseFloat(players[j].volume))
+          TwitchPlayer.setMuted(false);
+        }
+
+        if (hascam) { 
+          options2 = {
+            width: camWidth,
+            height: camHeight,
+            channel: players[j].channel ? players[j].channel : "brat2",
+            parent: "localhost",
+            autoplay: true,
+            muted: true
+          };
+
+          document.getElementById("camPlayer" + (j + 1)).innerHTML = "";
+          var TwitchPlayerCam = new Twitch.Player("camPlayer" + (j + 1), options2);
+          TwitchPlayerCam.setVolume(0);
+          resize(campProp, document.getElementById("camPlayer" + (j + 1)), true);
+
+        }
+      }
     }
   }
 
@@ -224,7 +287,7 @@ setTimeout(() => {
         EmbedList[j].setChannel(players[j].channel);
       }
       if (players[j].volume != old[j].volume) {
-        EmbedList[j].setVolume(players[j].volume);
+        EmbedList[j].setVolume(parseFloat(players[j].volume));
       }
       if (players[j].status != old[j].status) {
         if (players[j].status == "Play") {
@@ -233,7 +296,7 @@ setTimeout(() => {
           EmbedList[j].pause();
         }
       }
-      resize(opts[j].prop,document.getElementById("containerPlayer" + (j+1)) ,optLayout)
+      resize(opts[j].prop, document.getElementById("containerPlayer" + (j + 1)), false);
     }
   }
 
@@ -245,7 +308,7 @@ setTimeout(() => {
     //gameSystem.className = runData.system;
     if (gameSystem) gameSystem.style.backgroundImage =
       "url('../graphics/Images/logos/" +
-      runData.system.replace("/", "") +
+      (runData.system ? runData.system.replace("/", ""):'') +
       ".png')";
 
     if (gameEstimate) gameEstimate.innerHTML = runData.estimate; // game-estimate.html
@@ -370,31 +433,88 @@ setTimeout(() => {
     return http.status != 404;
   }
 
-  function resize(value, Div, lay) {
+  function resize(value, Div, cam) {
     var tocrop = 100 - value;
     
-    var width = videoWidth;
-    var height = videoHeight;
+    var width = cam ? camWidth : videoWidth;
+    var height = cam ? camHeight : videoHeight;
 
     width = height * 16 / 9;
 
     cropX = (tocrop / 100) * width;
     cropY = (tocrop / 100) * height;
 
-    Div.firstChild.style.width = width + cropX + "px";
-    Div.firstChild.style.height = height + cropY + "px";
+    if (cam) { 
+      cropX = (tocrop / 43) * width;
+      cropY = (tocrop / 43) * height;
+    }
 
+    Div.style.width = width - ex + "px";
+    Div.style.height = height + "px";
+    
     Div.style.overflow = "hidden";
-    Div.style.width = width - ex;
-    Div.style.height = height;
 
-    Div.style.marginLeft = "-" + ( cropX + ex ) + "px";
-    Div.style.marginBottom = "-" + ( cropY + eY )+ "px";
+    if (cam) {
+      Div.firstChild.style.marginTop = "-" + cropY  + "px";
+    } else {
+ 
+      Div.firstChild.style.marginLeft = "-" + ((cropX) + ex) + "px";
+      Div.firstChild.style.marginBottom = "-" + ( cropY)+ "px";
 
-
+    }
+      Div.firstChild.style.width = width + cropX + "px";
+      Div.firstChild.style.height = height + cropY + "px";
   }
 
   //slidePat(0);
   //slidePre(0);
+
+  randoTracker.on("change", (newVal, oldVal) => {
+
+    //OOT
+
+    //height: 180px;
+    //width: 618px;
+    var medalwidth = "66px";
+    var medalheight = "70px;";
+    var itemwidth = "50px";
+    var itemheight = "50px;";
+    var musicwidth = "50px";
+    var musicheight = "50px;";
+
+    if (randomLayout == "OOT") { 
+      var randoTrackerDiv = document.getElementById("randoTracker");
+      randoTrackerDiv.style.height = "180px";
+        var tracker = "<div style = 'margin-top:5px;margin-left:12px;color:rgb(152,224,95) !important'>";
+      newVal.itens.forEach(element => {
+          var imgName = element.name;
+          if (element.have == 0) {
+            imgName += "_fade";
+          } else {
+            if (element.have != element.max || (element.have == element.max && element.max != 1) ) {
+                imgName += "_" + element.have;
+            }
+          }
+        if (element.type == "break") {
+          tracker += "</div><div style = 'margin-left:12px;color:rgb(152,224,95) !important'>";
+
+        } else {
+          switch (element.type) { 
+              case "jewel":
+                  tracker += "<div style='display:inline-block; text-align: center;vertical-align: bottom;background-repeat: no-repeat;background-size: contain; background-image: url(\"Images//Tracker//OOT//" + imgName + ".png\"); width:" + medalwidth + ";height :" + medalheight + "' onclick=\"addItem('" + element.name + "')\"><div class='location' style='margin-top:45px' onclick=\"rotateLocation('" + element.name + "','" + element.location + "')\">" + element.location + "</div></div>";
+              break;
+              case "item":
+                  tracker += "<div style='display:inline-block;background-repeat: no-repeat;background-size: contain; background-image: url(\"Images//Tracker//OOT//" + imgName + ".png\"); width:" + itemwidth + ";height :" + itemheight + "' onclick=\"addItem('" + element.name + "')\"></div>";
+              break;
+              case "music":
+                  tracker += "<div style='display:inline-block;background-repeat: no-repeat;background-size: contain; background-image: url(\"Images//Tracker//OOT//" + imgName + ".png\"); width:" + musicwidth + ";height :" + musicheight + "' onclick=\"addItem('" + element.name + "')\"></div>";
+                break;
+          }
+        }
+      });
+      tracker += "</div>";
+      randoTrackerDiv.innerHTML = tracker;
+    }
+  });
   
 }, 2000);

@@ -44,7 +44,7 @@ incentUrl.on("change", (newVal, oldVal) => {
 });
 
 function reImport() {
-  incentUrl.value = UrlElement.value;
+  incentUrl.value = "https://spreadsheets.google.com/feeds/cells/1HWyt8GlacKRUYuUhN1iwR3a2kFeDxJeewRCOtOUs7M0/6/public/full?alt=json";
   if (actualUrl && actualUrl != "undefined") {
     $.getJSON(actualUrl, function (data) {
       var entry = data.feed.entry;

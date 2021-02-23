@@ -14,25 +14,25 @@
 
 	var oldDonate = 0;
 	
-var slideStep = 0;
+	var slideStep = 0;
 	
-var incentivos = [];
+	var incentivos = [];
 
 	//setup();
 	
-	
+	var	lopCont = 0;
+	var inCount = 0;
 		
 	next4incs.on('change', (newVal, oldVal) => {
 		if (newVal)
 		{
+			lopCont = 0;
 			incentivos = [];
 			newVal.forEach(element => {
 				incentivos.push(element);
 			});
 		}
 	});
-		
-
 	
 	setTimeout(() => {
 		donateTotal.on('change', (newVal, oldVal) => {
@@ -50,14 +50,10 @@ var incentivos = [];
 			}
 		});
 		
-		
-
 		loop();
 
-	}, 2000);
+	}, 2600);
 	
-	var	lopCont = 0;
-	var inCount = 0;
 	function loop() { 
 		var nextRuns = document.getElementById("nextRuns"); 
 		var nextIncs = document.getElementById("nextIncs"); 
@@ -80,6 +76,9 @@ var incentivos = [];
 			if (nextRuns) nextRuns.style.display = "flex";
 				timer = 15000;
 				lopCont = 2;
+				if (incentivos.length == 0) { 
+					lopCont = 0;
+				}
 				setTimeout(() => {
 					loop();
 				}, timer);
@@ -94,7 +93,6 @@ var incentivos = [];
 				break;
 			case 3:
 				if (nextIncs) nextIncs.style.display = "flex";
-				lopCont = 0;
 				loopIncs()	
 			break;
 				
@@ -110,51 +108,48 @@ var incentivos = [];
 	
 	function loadIncs(count) { 	
 		for (var i = 0; i < incentivos.length; i++){
-			if (i == count) { 
-				if (incentivos[i].type == "Arc") { 
-					document.getElementById("incBox1").style.display = "flex";
-					var incGame  = document.getElementById("incGame1");
-					var incname  = document.getElementById("incName1");
-					var incVal   = document.getElementById("incVal1");
+			if (i == count) {
+				if (incentivos[i].type == "Arc") {
+					document.getElementById("incBox1").style.display = "inline-block";
+					var incGame = document.getElementById("incGame1");
+					var incname = document.getElementById("incName1");
+					var incVal = document.getElementById("incVal1");
 					incGame.innerHTML = incentivos[i].game;
 					incname.innerHTML = incentivos[i].name;
-					if(incVal) incVal.innerHTML  = incentivos[i].valueA + " / " + incentivos[i].valueB;
+					if (incVal) incVal.innerHTML = (incentivos[i].valueA ? incentivos[i].valueA : "0") + " / " + incentivos[i].valueB;
 				}
-				if (incentivos[i].type == "Mod") { 
+				if (incentivos[i].type == "Mod") {
 					var box = 1
-					document.getElementById("incBox1").style.display = "flex";
-					var incGame  = document.getElementById("incGame1");
-					var Incname  = document.getElementById("incName1");
-					var incVal   = document.getElementById("incVal1");
+					document.getElementById("incBox1").style.display = "inline-block";
+					var incGame = document.getElementById("incGame1");
+					var Incname = document.getElementById("incName1");
+					var incVal = document.getElementById("incVal1");
 					incGame.innerHTML = incentivos[i].game;
 					Incname.innerHTML = incentivos[i].name;
-					if(incVal) incVal.innerHTML  = "";
+					if (incVal) incVal.innerHTML = "";
 					box += 1;
-					for (var j = 0; j < incentivos[i].options.length; j++) { 
+					for (var j = 0; j < incentivos[i].options.length; j++) {
 						if (incentivos[i].options[j].name != "") {
-							document.getElementById("incBox"+box).style.display = "flex";
-							var incGame2  = document.getElementById("incGame" + box);
-							var incname2  = document.getElementById("incName" + box);
-							var incVal2   = document.getElementById("incVal" + box);
+							document.getElementById("incBox" + box).style.display = "inline-block";
+							var incGame2 = document.getElementById("incGame" + box);
+							var incname2 = document.getElementById("incName" + box);
+							var incVal2 = document.getElementById("incVal" + box);
 							incGame2.innerHTML = incentivos[i].options[j].name;
 							incname2.innerHTML = "";
-							if(incVal2) incVal2.innerHTML  = incentivos[i].options[j].value;
+							if (incVal2) incVal2.innerHTML = (incentivos[i].options[j].valueA ? incentivos[i].options[j].valueA : "0");
 							box += 1;
 						}
 					}
 				}
-				if (i == incentivos.length) {
+				if (i == incentivos.length - 1) {
 					inCount = 0;
 					lopCont = 0;
-				} else { 
+					loop();
+				} else {
 					inCount += 1;
-				}
-				if (lopCont != 0) {
 					setTimeout(() => {
 						loopIncs();
-					}, 5000);
-				} else { 
-					loop();
+					}, 6000);
 				}
 			}
 		}
@@ -208,14 +203,15 @@ var incentivos = [];
 	
 	function setRuns(value){
 		runsHtml = "";
-		for (var i = 0; i < value.length; i++){
+		for (var i = 0; i < 4; i++){
 			var nextBox = document.getElementById("nextBox" + (i + 1));
-			if (nextBox) nextBox.style.display = "flex";
-			if (value[i].game) {
+			if (nextBox) nextBox.style.display = "inline-block";
+
+			if (value[i]) {
 				var nextRunName = document.getElementById("nextRunName" + (i + 1));
 				var nextRunCat = document.getElementById("nextRunCat" + (i + 1));
-				nextRunName.innerHTML = value[i].game.includes("Jogo Extra") ? value[i].game.substring(0, 12) : value[i].game;
-				nextRunCat.innerHTML = value[i].game.includes("Jogo Extra") ? "Categoria Extra" : value[i].category;
+				nextRunName ? nextRunName.innerHTML = value[i].game.includes("Jogo Extra") ? value[i].game.substring(0, 12) : value[i].game : null;
+				nextRunCat ? nextRunCat.innerHTML = value[i].game.includes("Jogo Extra") ? "Categoria Extra" : value[i].category: null; 
 			} else { 
 				if (nextBox) nextBox.style.display = "none";
 			}

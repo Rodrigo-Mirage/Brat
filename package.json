@@ -75,6 +75,14 @@
         "headerColor": "#0000FF"
       },
       {
+        "name": "OOT",
+        "title": "OOT",
+        "width": 5,
+        "file": "randoTracker.html",
+        "headerColor": "#0000FF",
+        "workspace": "Tracker"
+      },
+      {
         "name": "setCrop",
         "title": "Crop",
         "file": "setCrop.html",
