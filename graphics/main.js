@@ -1,6 +1,7 @@
 var speedcontrolBundle = "nodecg-speedcontrol";
 var runDataActiveRun = nodecg.Replicant("runDataActiveRun", speedcontrolBundle);
 var optionsActiveData = nodecg.Replicant("optionsActiveData");
+var hostName = nodecg.Replicant("hostName");
 var timer = nodecg.Replicant("timer", speedcontrolBundle);
 
 
@@ -31,7 +32,7 @@ var randoTracker = nodecg.Replicant("randoTracker");
 
 
 nodecg.readReplicant("optionsActiveData", "Brat", (opt) => {
-  templateName = "#";
+  //templateName = "#";
   opts = opt.crops;
   optLayout = opt.layout;
   couchText = opt.couch;
@@ -61,51 +62,76 @@ nodecg.readReplicant("optionsActiveData", "Brat", (opt) => {
     templateName += "-Rando-" + opt.rando;
     randomLayout = opt.rando;
   }
-
-
   switch (templateName) { 
-    case "#fourByThree-One":
-      videoHeight = 940;
-      videoWidth = 1254;
+    case "fourByThree-One":
+      videoHeight = 928;
+      videoWidth = 1233;
       ex = 420;
       eY = 5;
       break;
-    case "#sixteenByNine-One":
-      videoHeight = 803;
-      videoWidth = 1414;
+    case "sixteenByNine-One":
+      videoHeight = 820;
+      videoWidth = 1455;
       eY = 5;
       break;
-    case "#sixteenByNine-One-Cam":
-      videoHeight = 803;
-      videoWidth = 1414;
-      camHeight = 255;
-      camWidth = 458;
+    case "sixteenByNine-One-Cam":
+      videoHeight = 820;
+      videoWidth = 1455;
+      camHeight = 225;
+      camWidth = 400;
       hascam = true;
       eY = 5;
       break;
-    case "#fourByThree-Two":
+    case "fourByThree-Two":
       videoHeight = 713;
       videoWidth = 944;
       ex = 326;
       break;
-    case"#sixteenByNine-Two":
-      videoHeight = 940;
-      videoWidth = 1254;
-      ex = 730;
+    case"sixteenByNine-Two":
+      videoHeight = 523;
+      videoWidth = 929;
+      ex = 5;
       break;
-    case "#fourByThree-Four":
+    case "fourByThree-Four":
       videoHeight = 460;
       videoWidth = 614;
       ex = 204;
       ey = 0;
       break;
-    case "#fourByThree-One-Rando-OOT":
-      videoHeight = 940;
-      videoWidth = 1254;
+    case "fourByThree-One-Cam-Rando-OOT":
+      videoHeight = 928;
+      videoWidth = 1233;
+      camHeight = 225;
+      camWidth = 400;
       ex = 420;
       eY = 5;
+      hascam = true;
+      break;
+    
+    case "fourByThree-Two-Rando-MMR":
+      videoHeight = 615;
+      videoWidth = 820;
+      ex = 326;
+      break;
+    case "fourByThree-One-Rando-SMZ3":
+      videoHeight = 928;
+      videoWidth = 1233;
+      ex = 420;
+      break;
+    case "fourByThree-One-Cam-Rando-Convidado":
+      videoHeight = 928;
+      videoWidth = 1233;
+      camHeight = 225;
+      camWidth = 400;
+      ex = 420;
+      eY = 5;
+      hascam = true;
       break;
   }
+
+  var canvas = document.getElementById("canvas");
+  canvas.className = templateName;
+
 });
 
 
@@ -144,10 +170,6 @@ setTimeout(() => {
       }),
     };
 
-  var layout = new Vue({
-      vuetify: new Vuetify(),
-      render: (h) => h(App),
-  }).$mount("#app");
 
   var gameTitle = document.getElementById("gameTitle"); // game-title.html
 
@@ -155,6 +177,7 @@ setTimeout(() => {
   var gameSystem = document.getElementById("gameSystem"); // game-system.html
   var gameEstimate = document.getElementById("gameEstimate"); // game-estimate.html
   var embedData = nodecg.Replicant("embedData");
+  var maintimer = document.getElementById("gameTimer");
   var timerElem = document.getElementById("timer1");
   var player = document.getElementById("player1"); // player.html
 
@@ -169,8 +192,18 @@ setTimeout(() => {
 
 
   var elemPre = document.getElementById("premios");
-  var elemPat = document.getElementById("patro");
+  var elemPat = document.getElementById("sponsor");
   var couch = document.getElementById("couch");
+
+  var gameHost = document.getElementById("gameHost"); // game-estimate.html
+    hostName.on("change", (newVal, oldVal) => {
+    if (newVal) {
+        gameHost.innerHTML = newVal;
+    }
+  });
+
+
+
   if(couch) couch.innerHTML = couchText;
 
   var ids = [];
@@ -220,6 +253,9 @@ setTimeout(() => {
       if (newVal.rando) {
         temp += "-Rando-"+newVal.rando;
       }
+      
+      var canvas = document.getElementById("canvas");
+      canvas.className = temp;
 
       if (temp != templateName) {
         location.reload();
@@ -242,24 +278,18 @@ setTimeout(() => {
         channel: players[j].channel ? players[j].channel : "brat2",
         parent: "localhost",
         autoplay: true,
-        muted: true
+        muted: false
       };
       
-      var div = document.getElementById("containerPlayer" + (j + 1));
+      var div = document.getElementById("containerPlayer" + (j + 1)+"Div");
       div.innerHTML = "";
 
       if (div) { 
-        var TwitchPlayer = new Twitch.Player("containerPlayer" + (j + 1), options2);
+        var TwitchPlayer = new Twitch.Player("containerPlayer" + (j + 1)+"Div", options2);
 
         EmbedList.push(TwitchPlayer);
         resize(opts[j].prop, div, false);
-
-        TwitchPlayer.setVolume(0);
-
-        if (players[j].volume != "0.0") {
-          console.log(parseFloat(players[j].volume))
-          TwitchPlayer.setMuted(false);
-        }
+        TwitchPlayer.setVolume(parseFloat(players[j].volume));
 
         if (hascam) { 
           options2 = {
@@ -270,12 +300,27 @@ setTimeout(() => {
             autoplay: true,
             muted: true
           };
-
-          document.getElementById("camPlayer" + (j + 1)).innerHTML = "";
-          var TwitchPlayerCam = new Twitch.Player("camPlayer" + (j + 1), options2);
+          document.getElementById("runnerCam" + (j + 1)+"Div").innerHTML = "";
+          var TwitchPlayerCam = new Twitch.Player("runnerCam" + (j + 1)+"Div", options2);
           TwitchPlayerCam.setVolume(0);
-          resize(campProp, document.getElementById("camPlayer" + (j + 1)), true);
+          resize(campProp, document.getElementById("runnerCam" + (j + 1)+"Div"), true);
 
+          if (templateName == "fourByThree-One-Cam-Rando-Convidado") {
+            
+            options2 = {
+              width: camWidth,
+              height: camHeight,
+              channel: players[j].channel ? players[j].channel : "brat2",
+              parent: "localhost",
+              autoplay: true,
+              muted: true
+            };
+            document.getElementById("runnerCam2Div").innerHTML = "";
+            var TwitchPlayerCam = new Twitch.Player("runnerCam2Div", options2);
+            TwitchPlayerCam.setVolume(0);
+            resize(campProp, document.getElementById("runnerCam2Div"), true);
+
+          }
         }
       }
     }
@@ -305,18 +350,29 @@ setTimeout(() => {
 
     if (gameTitle) gameTitle.innerHTML = runData.game; // game-title.html
     if (gameCategory) gameCategory.innerHTML = runData.category; // game-category.html
-    //gameSystem.className = runData.system;
-    if (gameSystem) gameSystem.style.backgroundImage =
-      "url('../graphics/Images/logos/" +
-      (runData.system ? runData.system.replace("/", ""):'') +
-      ".png')";
-
+    if (gameSystem) gameSystem.innerHTML = runData.system; // game-system.html
     if (gameEstimate) gameEstimate.innerHTML = runData.estimate; // game-estimate.html
 
     if (player) player.innerHTML = "";
     if (player2) player2.innerHTML = "";
     if (player3) player3.innerHTML = "";
     if (player4) player4.innerHTML = "";
+
+
+    
+    
+    if (templateName == "fourByThree-One-Cam-Rando-OOT") {
+      
+      if (gameTitle) gameTitle.innerHTML = "The Legend of Zelda: O Carrinho of Time"; // game-title.html
+      if (gameCategory) gameCategory.innerHTML = "CNH% Turbo - Rando"; // game-category.html
+      if (gameSystem) gameSystem.innerHTML = "Simulador do CFC"; // game-system.html
+      if (gameEstimate) gameEstimate.innerHTML = runData.estimate; // game-estimate.html
+
+      var playerDiv = document.getElementById("player1Div"); // player.html
+      playerDiv.innerHTML = `Piloto:<span id="player1"></span>`;
+      player = document.getElementById("player1"); // player.html
+    }
+
 
     var count = 0;
     ids = [];
@@ -343,6 +399,9 @@ setTimeout(() => {
         count++;
       }
     }
+
+
+
   }
 
   timer.on("change", (newVal, oldVal) => {
@@ -350,6 +409,7 @@ setTimeout(() => {
   });
 
   function updateTimer(newVal, oldVal) {
+    maintimer.innerHTML = newVal.time;
     for (var j = 0; j < ids.length; j++) {
       switch (j) {
         case 0:
@@ -391,13 +451,13 @@ setTimeout(() => {
   function slidePat(id) {
     var next = id + 1;
 
-    var nexturl = "Images/Patro/Pat" + (next > 9 ? next : "0" + next) + ".jpg";
+    var nexturl = "Images/sponsor/" + (next > 9 ? next : "0" + next) + ".png";
 
     if (!imageExists(nexturl)) {
       next = 0;
     }
 
-    nexturl = "Images/Patro/Pat" + (next > 9 ? next : "0" + next) + ".jpg";
+    nexturl = "Images/sponsor/" + (next > 9 ? next : "0" + next) + ".png";
 
     if(elemPat) elemPat.src = nexturl;
 
@@ -449,24 +509,30 @@ setTimeout(() => {
       cropY = (tocrop / 43) * height;
     }
 
-    Div.style.width = width - ex + "px";
-    Div.style.height = height + "px";
-    
-    Div.style.overflow = "hidden";
+    if (Div) {
+      Div.style.width = width - ex + "px";
+      Div.style.height = height + "px";
+      
+      Div.style.overflow = "hidden";
+    }
 
     if (cam) {
-      Div.firstChild.style.marginTop = "-" + cropY  + "px";
-    } else {
- 
-      Div.firstChild.style.marginLeft = "-" + ((cropX) + ex) + "px";
-      Div.firstChild.style.marginBottom = "-" + ( cropY)+ "px";
-
+      if (Div) {
+        Div.firstChild.style.marginTop = "-" + cropY  + "px";
+      }
+    } else{
+      if (Div) {
+        Div.firstChild.style.marginLeft = "-" + ((cropX) + ex) + "px";
+        Div.firstChild.style.marginBottom = "-" + ( cropY)+ "px";
+      }
     }
+    if (Div) {
       Div.firstChild.style.width = width + cropX + "px";
       Div.firstChild.style.height = height + cropY + "px";
+    }
   }
 
-  //slidePat(0);
+  slidePat(0);
   //slidePre(0);
 
   randoTracker.on("change", (newVal, oldVal) => {
@@ -475,46 +541,79 @@ setTimeout(() => {
 
     //height: 180px;
     //width: 618px;
+
     var medalwidth = "66px";
     var medalheight = "70px;";
     var itemwidth = "50px";
     var itemheight = "50px;";
-    var musicwidth = "50px";
-    var musicheight = "50px;";
+    var divheight = "180px";
 
-    if (randomLayout == "OOT") { 
-      var randoTrackerDiv = document.getElementById("randoTracker");
-      randoTrackerDiv.style.height = "180px";
-        var tracker = "<div style = 'margin-top:5px;margin-left:12px;color:rgb(152,224,95) !important'>";
-      newVal.itens.forEach(element => {
-          var imgName = element.name;
-          if (element.have == 0) {
-            imgName += "_fade";
-          } else {
-            if (element.have != element.max || (element.have == element.max && element.max != 1) ) {
-                imgName += "_" + element.have;
-            }
-          }
-        if (element.type == "break") {
-          tracker += "</div><div style = 'margin-left:12px;color:rgb(152,224,95) !important'>";
 
-        } else {
-          switch (element.type) { 
-              case "jewel":
-                  tracker += "<div style='display:inline-block; text-align: center;vertical-align: bottom;background-repeat: no-repeat;background-size: contain; background-image: url(\"Images//Tracker//OOT//" + imgName + ".png\"); width:" + medalwidth + ";height :" + medalheight + "' onclick=\"addItem('" + element.name + "')\"><div class='location' style='margin-top:45px' onclick=\"rotateLocation('" + element.name + "','" + element.location + "')\">" + element.location + "</div></div>";
-              break;
-              case "item":
-                  tracker += "<div style='display:inline-block;background-repeat: no-repeat;background-size: contain; background-image: url(\"Images//Tracker//OOT//" + imgName + ".png\"); width:" + itemwidth + ";height :" + itemheight + "' onclick=\"addItem('" + element.name + "')\"></div>";
-              break;
-              case "music":
-                  tracker += "<div style='display:inline-block;background-repeat: no-repeat;background-size: contain; background-image: url(\"Images//Tracker//OOT//" + imgName + ".png\"); width:" + musicwidth + ";height :" + musicheight + "' onclick=\"addItem('" + element.name + "')\"></div>";
-                break;
-          }
-        }
-      });
-      tracker += "</div>";
-      randoTrackerDiv.innerHTML = tracker;
+    var prizemarginT = "30px";
+    var prizemargin = "5px";
+    var prizewidth = "50px";
+    var prizeheight = "20px";
+
+
+    switch (newVal.layout) {
+      case "MMR":
+        itemwidth = "45px";
+        itemheight = "45px;";
+        divheight = "180px";
+        break;
+
     }
+
+
+    for (i = 0; i < newVal.itens.length; i++) {
+      var randoTrackerDiv = document.getElementById("randoTracker" + (i + 1));
+      if (randoTrackerDiv) {
+        randoTrackerDiv.style.height = divheight;
+        var tracker = "<div style = 'margin-top:5px;margin-left:12px;color:rgb(152,224,95) !important'>";
+        newVal.itens[i].forEach(element => {
+            var imgName = element.name;
+            if (element.have == 0) {
+              imgName += "_fade";
+            } else {
+              if (element.have != element.max || (element.have == element.max && element.max != 1) ) {
+                  imgName += "_" + element.have;
+              }
+            }
+          if (element.type == "break") {
+            tracker += "</div><div style = 'margin-left:12px;color:rgb(152,224,95) !important'>";
+
+          } else {
+              switch (element.type) {
+                //OOT
+                case "jewel":
+                    tracker += "<div style='display:inline-block; text-align: center;vertical-align: bottom;background-repeat: no-repeat;background-size: contain; background-image: url(\"Images//Tracker//"+newVal.layout+"//" + imgName + ".png\"); width:" + medalwidth + ";height :" + medalheight + "' onclick=\"addItem('" + element.name + "','"+newVal.layout+"',"+i+")\"><div class='location' style='margin-top:45px' onclick=\"rotateLocation('" + element.name + "','" + element.location + "','"+newVal.layout+"',"+i+")\">" + element.location + "</div></div>";
+                break;
+                case "medal":
+                    tracker += "<div style='display:inline-block; text-align: center;vertical-align: bottom;background-repeat: no-repeat;background-size: contain; background-image: url(\"Images//Tracker//"+newVal.layout+"//" + imgName + ".png\"); width:" + itemwidth + ";height :" + itemheight + "' onclick=\"addItem('" + element.name + "','"+newVal.layout+"',"+i+")\"><div class='location' style='margin-top:35px' onclick=\"rotateLocation('" + element.name + "','" + element.location + "','"+newVal.layout+"',"+i+")\">" + element.location + "</div></div>";
+                break;
+                case "location":
+                    tracker += "<div style='display:inline-block; text-align: center;vertical-align: bottom;background-repeat: no-repeat;background-size: contain;background-position: center; background-image: url(\"Images//Tracker//"+newVal.layout+"//" + imgName + ".png\"); width:" + itemwidth + ";height :" + itemheight + "' onclick=\"addItem('" + element.name + "','"+newVal.layout+"',"+i+")\"><div class='location' onclick=\"rotatePrize('" + element.name + "','" + element.prize + "','"+newVal.layout+"',"+i+")\" style='display:inline-block; text-align: center;vertical-align: bottom;background-repeat: no-repeat;background-size: contain;margin-top:"+prizemarginT+";margin-left:"+prizemargin+"; background-image: url(\"Images//Tracker//"+newVal.layout+"//" + element.prize + ".png\"); width:" + prizewidth + ";height :" + prizeheight + "'></div></div>";
+                break;
+                case "item":
+                case "music":
+                case "transf_mask":
+                case "boss_mask":
+                    tracker += "<div style='display:inline-block;background-repeat: no-repeat;background-size: contain; background-image: url(\"Images//Tracker//"+newVal.layout+"//" + imgName + ".png\"); width:" + itemwidth + ";height :" + itemheight + "' onclick=\"addItem('" + element.name + "','"+newVal.layout+"',"+i+")\"></div>";
+                    break;
+                case "space":
+                    tracker += "<div style='display:inline-block;background-repeat: no-repeat;background-size: contain; width:" + itemwidth + ";height :" + itemheight + "' ></div>";
+                  break;
+                
+                
+              }
+          }
+        });
+        tracker += "</div>";
+        randoTrackerDiv.innerHTML = tracker;
+      }
+
+    }
+    
   });
   
 }, 2000);

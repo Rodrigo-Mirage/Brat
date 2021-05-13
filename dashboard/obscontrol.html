@@ -14,73 +14,9 @@
     <button onclick="InterMission()">Intermission</button>
     <button onclick="Entrevista()">Entrevista</button>
     <button onclick="Run()">Run</button>
+    <button onclick="test()">TESTE</button>
 
-    <script>
-        var scene = document.getElementById('scene');	
-        
-        var speedcontrolBundle = 'nodecg-speedcontrol';
-        var runDataActiveRun = nodecg.Replicant('runDataActiveRun', speedcontrolBundle);
-        var ProgramScene = nodecg.Replicant('obs:programScene');
-        
-        var atual = {};
-	
-        runDataActiveRun.on('change', (newVal, oldVal) => {
-            
-            if (newVal){
-                atual = newVal;
-                updateScene(newVal);
-            }
-        }); 
-        
-        ProgramScene.on('change', (newVal, oldVal) => {
-            
-            if (newVal)
-                scene.innerHTML = newVal.name;
-        });
+    <script src="js/obsControl.js"></script>
 
-        function InterMission(){
-            nodecg.sendMessage('obs:previewScene', 'InterMission').then(() => {
-                nodecg.sendMessage('obs:transition', 'Fade').then(() => {
-                }).catch(err => {
-                });
-            }).catch(err => {
-            });
-        }
-
-        function Entrevista(){
-            nodecg.sendMessage('obs:previewScene', 'Entrevista').then(() => {
-
-                nodecg.sendMessage('obs:transition', 'Fade').then(() => {
-                }).catch(err => {
-                });
-            }).catch(err => {
-            });
-        }
-
-        function Run (){
-            updateScene(atual);
-        }
-
-        function updateScene(runData){
-            var count = 0;
-            for (var i=0; i < runData.teams.length ;i++){
-                for (var j=0; j < runData.teams[i].players.length ;j++){
-                    count++;
-                }				
-            }
-
-            var cena = 'Main'+count;
-
-            nodecg.sendMessage('obs:previewScene', cena).then(() => {
-                nodecg.sendMessage('obs:transition', 'Fade').then(() => {
-                }).catch(err => {
-                });
-            }).catch(err => {
-            });
-        }
-
-
-
-    </script>
 </body>
 </html>

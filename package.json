@@ -75,6 +75,13 @@
         "headerColor": "#0000FF"
       },
       {
+        "name": "host",
+        "title": "Host",
+        "width": 3,
+        "file": "HostControl.html",
+        "headerColor": "#0000FF"
+      },
+      {
         "name": "OOT",
         "title": "OOT",
         "width": 5,
@@ -104,29 +111,55 @@
       {
         "file": "index.html",
         "width": 1920,
-        "height": 1080
+        "height": 963
+      },
+      {
+        "file": "omnibar.html",
+        "width": 1920,
+        "height": 117
       },
       {
         "file": "nextRun.html",
         "width": 1920,
-        "height": 1080
+        "height": 948
       },
       {
         "file": "interMission.html",
         "width": 1920,
-        "height": 1080
+        "height": 963
       },
       {
         "file": "entrevista.html",
         "width": 1920,
-        "height": 1080
+        "height": 963
       },
       {
         "file": "dashboardHost.html",
         "width": 1920,
         "height": 1080
+      },
+      {
+        "file": "tracker.html",
+        "width": 1920,
+        "height": 1080
       }
-    ]
+    ],
+    "login": {
+      "enabled": true,
+      "sessionSecret": "eFDpNatx1ah6zjfmEvVao44K5K1giPcz",
+      "twitch": {
+        "enabled": true,
+        "clientID": "52fu4sd87p19ishpv2maz8yw5dd7p6",
+        "clientSecret": "9222r0ld1hsl8rmwujudhpu2gml0h6",
+        "scope": "user:read:email",
+        "allowedUsernames": [
+          "mirageiw",
+          "cesarmartins12",
+          "grafittex",
+          "hugo4fun"
+        ]
+      }
+    }
   },
   "repository": "https://github.com/nodecg/nodecg.git",
   "license": "MIT",

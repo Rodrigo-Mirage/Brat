@@ -15,10 +15,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.15/css/jquery.Jcrop.min.css" />
 </head>
 <body style="margin: 0">
-
-    <div id="randoTracker" style="padding: 47px;">
-    </div>
-    <button onclick="resetTracker()">Reset</button>
+    <fieldset>
+        Players: <input type="number" min="1" max="4" id="PlayerCount" />
+        Jogo: <select id="TypeSelect"></select>
+    </fieldset>
+    
+    <div id="randoTracker" style="padding: 47px;"></div>
+    
     <script src="js/randoTracker.js"></script>
 </body>
 

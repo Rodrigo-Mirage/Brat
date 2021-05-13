@@ -13,5 +13,30 @@
 <body>
     <nodecg-widget-obs></nodecg-widget-obs>
 
+	<script src="https://raw.github.com/nickdesaulniers/javascript-playlist-parser/master/lib/parser.min.js"></script>
+	<script>
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", "https://rainwave.cc/tune_in/5.ogg.m3u");
+		xhr.overrideMimeType("audio/x-mpegurl"); // Needed, see below.
+		xhr.onload = parse;
+		xhr.send();
+
+		// Parse it
+		function parse() {
+			var playlist = M3U.parse(this.response);
+			var audio = new Audio();
+			next(audio, playlist, 0);
+		};
+
+		// Play each song after a song finishes
+		function next(audio, playlist, i) {
+			if (i < playlist.length) {
+				audio.src = playlist[i++].file;
+				audio.onended = next.bind(null, audio, playlist, i);
+				audio.play();
+			}
+		};
+
+	</script>
 </body>
 </html>

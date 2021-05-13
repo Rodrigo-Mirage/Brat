@@ -1,3 +1,8 @@
 node_modules
 bower_components
 coverage
+graphics/Images/Intermission/*
+dashboard/Images/Intermission/*
+*.rar
+*.mov
+*.zip

@@ -85,6 +85,9 @@ optionsActiveData.on("change", (newVal, oldVal) => {
   randoText += (!newVal.rando ? "Nenhum" : newVal.rando);
   randoText += "<button onclick=\"SetRando(\'" + newVal.idRun + "',null)\">Nenhum</button>";
   randoText += "<button onclick=\"SetRando(\'" + newVal.idRun + "','OOT')\">OOT</button>";
+  randoText += "<button onclick=\"SetRando(\'" + newVal.idRun + "','MMR')\">MMR</button>";
+  randoText += "<button onclick=\"SetRando(\'" + newVal.idRun + "','SMZ3')\">SMZ3</button>";
+  randoText += "<button onclick=\"SetRando(\'" + newVal.idRun + "','Convidado')\">Convidado</button>";
   rando.innerHTML = randoText;
 });
 
@@ -129,6 +132,8 @@ optionsNextData.on("change", (newVal, oldVal) => {
   randoText += (!newVal.rando ? "Nenhum" : newVal.rando);
   randoText += "<button onclick=\"SetRando(\'" + newVal.idRun + "',null)\">Nenhum</button>";
   randoText += "<button onclick=\"SetRando(\'" + newVal.idRun + "','OOT')\">OOT</button>";
+  randoText += "<button onclick=\"SetRando(\'" + newVal.idRun + "','MMR')\">MMR</button>";
+  randoText += "<button onclick=\"SetRando(\'" + newVal.idRun + "','SMZ3')\">SMZ3</button>";
   randoNext.innerHTML = randoText;
     
 });

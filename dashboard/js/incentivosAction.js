@@ -4,16 +4,16 @@ var incentUrl = nodecg.Replicant("incentUrl");
 
 const UrlElement = document.getElementById("incentUrl");
 
-var actualUrl = "";
+var actualUrl = "https://spreadsheets.google.com/feeds/cells/19PkBpuZZTroJLuC0qjFKPrTlWqNNvlVgjUs-15Kp9ug/6/public/full?alt=json";
 
-//https://spreadsheets.google.com/feeds/cells/1HWyt8GlacKRUYuUhN1iwR3a2kFeDxJeewRCOtOUs7M0/6/public/full?alt=json
+//https://spreadsheets.google.com/feeds/cells/19PkBpuZZTroJLuC0qjFKPrTlWqNNvlVgjUs-15Kp9ug/6/public/full?alt=json
+//https://docs.google.com/spreadsheets/d/19PkBpuZZTroJLuC0qjFKPrTlWqNNvlVgjUs-15Kp9ug/edit#gid=0
+//2PACX-1vTfi3B83R_7Zh3ff5sN2E0xKm-bKpoU7bpx5UkbZnvolSfz5CHUxaWd3ajNut53YbhTy1wN9qlKwkC4
 
 nodecg.readReplicant("incentUrl", (value) => {
   actualUrl = value;
   UrlElement.value = actualUrl;
 });
-
-
 
 setTimeout(() => {
 function reorder() {
@@ -44,7 +44,7 @@ incentUrl.on("change", (newVal, oldVal) => {
 });
 
 function reImport() {
-  incentUrl.value = "https://spreadsheets.google.com/feeds/cells/1HWyt8GlacKRUYuUhN1iwR3a2kFeDxJeewRCOtOUs7M0/6/public/full?alt=json";
+  incentUrl.value = "https://spreadsheets.google.com/feeds/cells/19PkBpuZZTroJLuC0qjFKPrTlWqNNvlVgjUs-15Kp9ug/6/public/full?alt=json";
   if (actualUrl && actualUrl != "undefined") {
     $.getJSON(actualUrl, function (data) {
       var entry = data.feed.entry;
