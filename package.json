@@ -165,6 +165,6 @@
   "license": "MIT",
   "dependencies": {
     "bower-npm-resolver": "^0.10.0",
-    "nodecg-utility-obs": "^6.1.7"
+    "nodecg-utility-obs": "github:rodrigo-mirage/nodecg-utility-obs"
   }
 }

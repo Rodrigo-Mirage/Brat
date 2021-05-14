@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
 	<script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
 	<link rel="import" href="../bower_components/nodecg-widget-obs/nodecg-widget-obs.html">
+    <link rel="stylesheet" href="css/obs.css">
 	<style>
 		body {
 			margin: 0;
@@ -11,32 +12,15 @@
 	</style><link rel="stylesheet" href="/dashboard/css/brat-dashboard.css" />
 </head>
 <body>
-    <nodecg-widget-obs></nodecg-widget-obs>
 
-	<script src="https://raw.github.com/nickdesaulniers/javascript-playlist-parser/master/lib/parser.min.js"></script>
-	<script>
-		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "https://rainwave.cc/tune_in/5.ogg.m3u");
-		xhr.overrideMimeType("audio/x-mpegurl"); // Needed, see below.
-		xhr.onload = parse;
-		xhr.send();
+	<div id="form">
+		Ip: <input type="text" id="ipElement" name="ipElement"/></br>
+		port: <input type="text" id="portElement" name="portElement"/></br>
+		password: <input type="password" id="passwordElement" name="passwordElement"/></br>
+		<button id="conn" onclick="connect()">Connect</button>
+		<button id="disconn" onclick="disconnect()">Disconnect</button>
+	</div>
 
-		// Parse it
-		function parse() {
-			var playlist = M3U.parse(this.response);
-			var audio = new Audio();
-			next(audio, playlist, 0);
-		};
-
-		// Play each song after a song finishes
-		function next(audio, playlist, i) {
-			if (i < playlist.length) {
-				audio.src = playlist[i++].file;
-				audio.onended = next.bind(null, audio, playlist, i);
-				audio.play();
-			}
-		};
-
-	</script>
+	<script src="js/obs.js"></script>
 </body>
 </html>
