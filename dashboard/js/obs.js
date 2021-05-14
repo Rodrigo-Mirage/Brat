@@ -23,6 +23,16 @@ var password = "";
 var connected = true;
 
 function connect(){
+    nodecg.sendMessage('obs:connect', {
+        ip: ipElement.value,
+        port: portElement.value,
+        password: passwordElement.value
+    }, err => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+    });
 
     obsSettings.value = {
         ip:ipElement.value,
@@ -31,16 +41,6 @@ function connect(){
         status:'connecting'
     }
 
-    nodecg.sendMessage('obs:connect', {
-        ip: ip,
-        port: port,
-        password: password
-    }, err => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-    });
 }
 
 function disconnect(){
