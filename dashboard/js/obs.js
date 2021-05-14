@@ -23,6 +23,14 @@ var password = "";
 var connected = true;
 
 function connect(){
+
+    obsSettings.value = {
+        ip:ipElement.value,
+        port: portElement.value,
+        password: passwordElement.value,
+        status:'connecting'
+    }
+
     nodecg.sendMessage('obs:connect', {
         ip: ip,
         port: port,
