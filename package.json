@@ -143,28 +143,28 @@
         "width": 1920,
         "height": 1080
       }
-    ],
-    "login": {
-      "enabled": true,
-      "sessionSecret": "eFDpNatx1ah6zjfmEvVao44K5K1giPcz",
-      "twitch": {
-        "enabled": true,
-        "clientID": "52fu4sd87p19ishpv2maz8yw5dd7p6",
-        "clientSecret": "9222r0ld1hsl8rmwujudhpu2gml0h6",
-        "scope": "user:read:email",
-        "allowedUsernames": [
-          "mirageiw",
-          "cesarmartins12",
-          "grafittex",
-          "hugo4fun"
-        ]
-      }
-    }
+    ]
   },
   "repository": "https://github.com/nodecg/nodecg.git",
   "license": "MIT",
   "dependencies": {
     "bower-npm-resolver": "^0.10.0",
     "nodecg-utility-obs": "github:rodrigo-mirage/nodecg-utility-obs"
+  },
+  "login": {
+    "enabled": true,
+    "sessionSecret": "eFDpNatx1ah6zjfmEvVao44K5K1giPcz",
+    "twitch": {
+      "enabled": true,
+      "clientID": "52fu4sd87p19ishpv2maz8yw5dd7p6",
+      "clientSecret": "9222r0ld1hsl8rmwujudhpu2gml0h6",
+      "scope": "user:read:email",
+      "allowedUsernames": [
+        "mirageiw",
+        "cesarmartins12",
+        "grafittex",
+        "hugo4fun"
+      ]
+    }
   }
 }
